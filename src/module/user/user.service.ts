@@ -15,6 +15,8 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from 'src/exception';
+import { AuthPayload } from 'src/util/auth.payload';
+import { DateHelper } from 'src/util/date.helper';
 @Injectable()
 export class UserService {
   constructor(
@@ -94,9 +96,17 @@ export class UserService {
   }
 
   async generateToken(user: User): Promise<string> {
-    const payload = { id: user.id, email: user.email, username: user.username };
+    const iat = DateHelper.getCurrentTimestamp();
+    const expiresIn = 60 * 60 * 24; //1 Day In Seconds
+    const payload: AuthPayload = {
+      sub: user.id,
+      email: user.email,
+      username: user.username,
+      iat: iat,
+    };
     return await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_SECRET,
+      expiresIn,
     });
   }
 
