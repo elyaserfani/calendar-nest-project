@@ -1,5 +1,7 @@
 import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Sanitize } from 'src/module/common/sanitize.decorator';
+import { Trim } from 'src/module/common/trim.decorator';
 
 export class RegisterRequestDto {
   @ApiProperty({
@@ -21,6 +23,8 @@ export class RegisterRequestDto {
   @IsNotEmpty()
   @IsEmail()
   @MaxLength(256)
+  @Sanitize()
+  @Trim()
   email: string;
 
   @ApiProperty({
@@ -31,6 +35,8 @@ export class RegisterRequestDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(256)
+  @Sanitize()
+  @Trim()
   password: string;
 
   @ApiProperty({
@@ -41,6 +47,8 @@ export class RegisterRequestDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(256)
+  @Sanitize()
+  @Trim()
   nickname: string;
 
   @ApiProperty({
@@ -51,5 +59,7 @@ export class RegisterRequestDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(256)
+  @Sanitize()
+  @Trim()
   role: string;
 }
