@@ -1,8 +1,8 @@
 {
-  "name": "calendar-nest-proejct",
+  "name": "calendar-nest-project",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Nest.js Event Based Calendar Project",
+  "author": "Elyas Erfani",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
