@@ -4,7 +4,6 @@ import { Role, User } from 'src/entity';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { JwtModule } from '@nestjs/jwt';
-import { RoleModule } from '../role/role.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Role]), JwtModule],
