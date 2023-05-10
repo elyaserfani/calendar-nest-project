@@ -7,6 +7,8 @@ import {
   RegisterResponseDto,
 } from './dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { BadRequestException, NotFoundException } from 'src/exception';
+import { SwaggerCustomException } from 'src/decorator';
 
 @Controller('users')
 @ApiTags('users')
@@ -19,6 +21,10 @@ export class UserController {
     description: 'Register new user',
     type: [RegisterResponseDto],
   })
+  @SwaggerCustomException(() => [
+    new NotFoundException('Role not found'),
+    new BadRequestException('User with this username already exists'),
+  ])
   async register(
     @Body() registerRequestDto: RegisterRequestDto,
   ): Promise<RegisterResponseDto> {
@@ -32,6 +38,10 @@ export class UserController {
     description: 'Login user',
     type: [LoginResponseDto],
   })
+  @SwaggerCustomException(() => [
+    new NotFoundException('User with this username not found'),
+    new BadRequestException('Invalid credentials'),
+  ])
   async login(
     @Body() loginRequestDto: LoginRequestDto,
   ): Promise<LoginResponseDto> {

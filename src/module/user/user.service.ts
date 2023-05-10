@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -15,6 +10,11 @@ import {
   RegisterResponseDto,
 } from './dto';
 import { JwtService } from '@nestjs/jwt';
+import {
+  BadRequestException,
+  NotFoundException,
+  UnauthorizedException,
+} from 'src/exception';
 @Injectable()
 export class UserService {
   constructor(
@@ -38,7 +38,7 @@ export class UserService {
       name: registerRequestDto.role,
     });
     if (!role) {
-      throw new BadRequestException('Role not found');
+      throw new NotFoundException('Role not found');
     }
     const hashedPassword = await bcrypt.hash(registerRequestDto.password, 10);
     const newUser = this.userRepository.create({
@@ -95,7 +95,9 @@ export class UserService {
 
   async generateToken(user: User): Promise<string> {
     const payload = { id: user.id, email: user.email, username: user.username };
-    return await this.jwtService.signAsync(payload);
+    return await this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_SECRET,
+    });
   }
 
   async verifyToken(token: string): Promise<any> {

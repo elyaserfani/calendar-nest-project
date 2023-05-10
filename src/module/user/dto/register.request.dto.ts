@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Sanitize, Trim } from 'src/module/common';
+import { Sanitize, Trim } from 'src/decorator';
 
 export class RegisterRequestDto {
   @ApiProperty({
@@ -51,7 +51,7 @@ export class RegisterRequestDto {
   nickname: string;
 
   @ApiProperty({
-    example: 'Role',
+    example: 'ROLE_USER',
     description: 'Enter your role',
     maxLength: 256,
   })

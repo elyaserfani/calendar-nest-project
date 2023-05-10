@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Sanitize, Trim } from 'src/module/common';
+import { Sanitize, Trim } from 'src/decorator';
 
 export class LoginRequestDto {
   @ApiProperty({
