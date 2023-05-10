@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Event } from './event.entity';
 
 @Entity()
@@ -18,10 +25,10 @@ export class User {
   @Column()
   nickname: string;
 
-  @Column()
+  @CreateDateColumn()
   creation_time: Date;
 
-  @Column()
+  @UpdateDateColumn()
   update_time: Date;
 
   @Column()
