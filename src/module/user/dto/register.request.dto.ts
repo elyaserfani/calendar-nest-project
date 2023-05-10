@@ -1,7 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Sanitize } from 'src/module/common/sanitize.decorator';
-import { Trim } from 'src/module/common/trim.decorator';
+import { Sanitize, Trim } from 'src/module/common';
 
 export class RegisterRequestDto {
   @ApiProperty({
