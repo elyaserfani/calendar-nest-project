@@ -13,7 +13,6 @@ export function Sanitize(
     if ('string' !== typeof value) {
       return value;
     }
-    value = value.replaceAll(/<\s|<|&lt;\s|&lt;/g, '< ');
     let text = null;
     if (options?.ignoreFormattingTags) {
       text = sanitizeHtml(value);
@@ -22,9 +21,6 @@ export function Sanitize(
         allowedTags: [],
       });
     }
-    return text
-      .replace(/&amp;/g, '&')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>');
+    return text;
   }, transformOptions);
 }

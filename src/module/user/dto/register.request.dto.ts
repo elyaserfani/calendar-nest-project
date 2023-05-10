@@ -11,6 +11,8 @@ export class RegisterRequestDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(90)
+  @Sanitize()
+  @Trim()
   username: string;
 
   @ApiProperty({
