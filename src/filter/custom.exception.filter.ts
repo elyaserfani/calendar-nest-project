@@ -8,7 +8,7 @@ import {
 import { Response } from 'express';
 import {
   AppException,
-  ExceptionEnums,
+  GlobalExceptionEnum,
   InternalServerException,
 } from 'src/exception';
 @Catch()
@@ -31,7 +31,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
         this.logger.error('error get body', error.message);
       }
       exception = new InternalServerException(
-        ExceptionEnums.INTERNAL_SERVER_ERROR,
+        GlobalExceptionEnum.INTERNAL_SERVER_ERROR,
         error,
       );
     }
