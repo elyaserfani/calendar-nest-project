@@ -6,6 +6,7 @@ import {
   NotFoundException,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -22,6 +23,8 @@ import {
   CreateEventResponseDto,
   EventsResponseDto,
   GetEventResponseDto,
+  UpdateEventRequestDto,
+  UpdateEventResponseDto,
 } from './dto';
 import { JwtAuthGuard } from 'src/guard/jwt.auth.guard';
 import { AuthPayload } from 'src/util/auth.payload';
@@ -85,6 +88,23 @@ export class EventController {
     @Auth() auth: AuthPayload,
   ): Promise<GetEventResponseDto> {
     return await this.eventService.getEvent(eventId, auth.sub);
+  }
+
+  @Put('/:id')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update single event' })
+  @ApiResponse({
+    status: 200,
+    description: 'Update a single event',
+    type: [UpdateEventResponseDto],
+  })
+  @SwaggerCustomException(() => [new NotFoundException('Event not found')])
+  async updateEvent(
+    @Param('id') eventId: number,
+    @Body() event: UpdateEventRequestDto,
+    @Auth() auth: AuthPayload,
+  ): Promise<UpdateEventResponseDto> {
+    return await this.eventService.updateEvent(eventId, event, auth.sub);
   }
 
   @Delete('/:id')

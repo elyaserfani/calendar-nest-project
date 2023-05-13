@@ -6,6 +6,8 @@ import {
   CreateEventRequestDto,
   CreateEventResponseDto,
   GetEventResponseDto,
+  UpdateEventRequestDto,
+  UpdateEventResponseDto,
 } from './dto';
 import { NotFoundException } from 'src/exception';
 import { SuccessResponseDto } from 'src/common';
@@ -77,6 +79,39 @@ export class EventService {
     return {
       data: {
         event: event,
+      },
+    };
+  }
+
+  async updateEvent(
+    eventId: number,
+    updateEventRequestDto: UpdateEventRequestDto,
+    userId: number,
+  ): Promise<UpdateEventResponseDto> {
+    const event = await this.eventRepository.findOneBy({
+      id: eventId,
+      user: { id: userId },
+    });
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+    await this.eventRepository.update(eventId, {
+      title: updateEventRequestDto.title,
+      description: updateEventRequestDto.description,
+      due_date: updateEventRequestDto.due_date,
+      updated_at: new Date(),
+    });
+    const updatedEvent = await this.eventRepository.findOneBy({ id: eventId });
+    return {
+      data: {
+        event: {
+          id: updatedEvent.id,
+          title: updatedEvent.title,
+          description: updatedEvent.description,
+          due_date: updatedEvent.due_date,
+          created_at: updatedEvent.created_at,
+          updated_at: updatedEvent.updated_at,
+        },
       },
     };
   }
