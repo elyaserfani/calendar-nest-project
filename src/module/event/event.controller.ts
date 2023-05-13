@@ -41,7 +41,7 @@ export class EventController {
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get all user events' })
+  @ApiOperation({ summary: 'Get all user events with pagination' })
   @ApiQuery({ name: 'page', type: 'number', required: true, example: 1 })
   @ApiQuery({ name: 'pageSize', type: 'number', required: true, example: 10 })
   @ApiResponse({
