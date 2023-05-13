@@ -2,7 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from 'src/entity';
 import { Repository } from 'typeorm';
-import { CreateEventRequestDto, CreateEventResponseDto } from './dto';
+import {
+  CreateEventRequestDto,
+  CreateEventResponseDto,
+  GetEventResponseDto,
+} from './dto';
+import { NotFoundException } from 'src/exception';
 
 @Injectable()
 export class EventService {
@@ -53,6 +58,24 @@ export class EventService {
         total: total,
         page: Number(page),
         pageSize: data.length,
+      },
+    };
+  }
+
+  async getEvent(
+    eventId: number,
+    userId: number,
+  ): Promise<GetEventResponseDto> {
+    const event = await this.eventRepository.findOneBy({
+      id: eventId,
+      user: { id: userId },
+    });
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+    return {
+      data: {
+        event: event,
       },
     };
   }

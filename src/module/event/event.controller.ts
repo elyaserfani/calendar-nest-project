@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { EventService } from './event.service';
 import {
   ApiBearerAuth,
@@ -11,10 +20,11 @@ import {
   CreateEventRequestDto,
   CreateEventResponseDto,
   EventsResponseDto,
+  GetEventResponseDto,
 } from './dto';
 import { JwtAuthGuard } from 'src/guard/jwt.auth.guard';
 import { AuthPayload } from 'src/util/auth.payload';
-import { Auth } from 'src/decorator';
+import { Auth, SwaggerCustomException } from 'src/decorator';
 import { Event } from 'src/entity';
 
 @Controller('events')
@@ -58,5 +68,22 @@ export class EventController {
     meta: { total: number; page: number; pageSize: number };
   }> {
     return await this.eventService.findEvents(page, pageSize, auth.sub);
+  }
+
+  @Get('/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get single event' })
+  @ApiResponse({
+    status: 200,
+    description: 'Get single event details',
+    type: [GetEventResponseDto],
+  })
+  @SwaggerCustomException(() => [new NotFoundException('Event not found')])
+  async getEvent(
+    @Param('id') eventId: number,
+    @Auth() auth: AuthPayload,
+  ): Promise<GetEventResponseDto> {
+    return await this.eventService.getEvent(eventId, auth.sub);
   }
 }
