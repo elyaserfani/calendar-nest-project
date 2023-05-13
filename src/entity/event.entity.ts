@@ -12,7 +12,10 @@ export class Event {
   @Column()
   description: string;
 
-  @Column()
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   due_date: Date;
 
   @ManyToOne(() => User, (user) => user.events)

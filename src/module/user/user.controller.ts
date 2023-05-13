@@ -11,7 +11,7 @@ import { BadRequestException, NotFoundException } from 'src/exception';
 import { SwaggerCustomException } from 'src/decorator';
 
 @Controller('users')
-@ApiTags('users')
+@ApiTags('User')
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Post('register')
@@ -25,7 +25,7 @@ export class UserController {
     new NotFoundException('Role not found'),
     new BadRequestException('User with this username already exists'),
   ])
-  async register(
+  async registerUser(
     @Body() registerRequestDto: RegisterRequestDto,
   ): Promise<RegisterResponseDto> {
     return await this.userService.registerUser(registerRequestDto);
@@ -42,7 +42,7 @@ export class UserController {
     new NotFoundException('User with this username not found'),
     new BadRequestException('Invalid credentials'),
   ])
-  async login(
+  async loginUser(
     @Body() loginRequestDto: LoginRequestDto,
   ): Promise<LoginResponseDto> {
     return await this.userService.loginUser(loginRequestDto);

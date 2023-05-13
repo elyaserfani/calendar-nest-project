@@ -5,6 +5,7 @@ import { RoleModule } from './module/role/role.module';
 import { EventModule } from './module/event/event.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './util/jwt.strategy';
 
 @Module({
   imports: [
@@ -30,5 +31,6 @@ import { JwtModule } from '@nestjs/jwt';
     }),
   ],
   exports: [JwtModule],
+  providers: [JwtStrategy],
 })
 export class AppModule {}
