@@ -1,0 +1,33 @@
+import { Inject, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/entity';
+import { AuthPayload } from 'src/util/auth.payload';
+import { DateHelper } from 'src/util/date.helper';
+
+export class JwtHelper {
+  constructor(@Inject(JwtService) private readonly jwtService: JwtService) {}
+
+  async generateToken(user: User): Promise<string> {
+    const iat = DateHelper.getCurrentTimestamp();
+    const expiresIn = 60 * 60 * 24; //1 Day In Seconds
+    const payload: AuthPayload = {
+      sub: user.id,
+      email: user.email,
+      username: user.username,
+      iat: iat,
+    };
+    return await this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_SECRET,
+      expiresIn,
+    });
+  }
+
+  async verifyToken(token: string): Promise<any> {
+    try {
+      const payload = this.jwtService.verify(token);
+      return payload;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
+  }
+}

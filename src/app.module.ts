@@ -24,7 +24,10 @@ import { JwtModule } from '@nestjs/jwt';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
-    JwtModule.register({ secret: process.env.JWT_SECRET }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '1d' },
+    }),
   ],
   exports: [JwtModule],
 })

@@ -9,14 +9,9 @@ import {
   RegisterRequestDto,
   RegisterResponseDto,
 } from './dto';
-import { JwtService } from '@nestjs/jwt';
-import {
-  BadRequestException,
-  NotFoundException,
-  UnauthorizedException,
-} from 'src/exception';
-import { AuthPayload } from 'src/util/auth.payload';
-import { DateHelper } from 'src/util/date.helper';
+import { BadRequestException, NotFoundException } from 'src/exception';
+import { JwtHelper } from 'src/helper/jwt.helper';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -24,7 +19,7 @@ export class UserService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
-    private readonly jwtService: JwtService,
+    private readonly jwtHelper: JwtHelper,
   ) {}
 
   async registerUser(
@@ -51,7 +46,7 @@ export class UserService {
       role: registerRequestDto.role,
     });
     const savedUser = await this.userRepository.save(newUser);
-    const token = await this.generateToken(savedUser);
+    const token = await this.jwtHelper.generateToken(savedUser);
     return {
       data: {
         user: {
@@ -80,7 +75,7 @@ export class UserService {
     if (!isPasswordValid) {
       throw new BadRequestException('Invalid credentials');
     }
-    const token = await this.generateToken(user);
+    const token = await this.jwtHelper.generateToken(user);
     return {
       data: {
         user: {
@@ -93,29 +88,5 @@ export class UserService {
         },
       },
     };
-  }
-
-  async generateToken(user: User): Promise<string> {
-    const iat = DateHelper.getCurrentTimestamp();
-    const expiresIn = 60 * 60 * 24; //1 Day In Seconds
-    const payload: AuthPayload = {
-      sub: user.id,
-      email: user.email,
-      username: user.username,
-      iat: iat,
-    };
-    return await this.jwtService.signAsync(payload, {
-      secret: process.env.JWT_SECRET,
-      expiresIn,
-    });
-  }
-
-  async verifyToken(token: string): Promise<any> {
-    try {
-      const payload = this.jwtService.verify(token);
-      return payload;
-    } catch (error) {
-      throw new UnauthorizedException('Invalid token');
-    }
   }
 }
