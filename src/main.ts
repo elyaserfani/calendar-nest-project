@@ -11,7 +11,13 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Calendar Project Backend')
-    .setDescription('Calendar Event Based Project APIs Documentation')
+    .setDescription(
+      '<h3>' +
+        'Calendar ' +
+        '<u>Event Based</u>' +
+        ' Project APIs Documentation' +
+        '</h3>',
+    )
     .addBearerAuth()
     .setContact('Elyas Erfani', null, 'elyaserfani2@gmail.com')
     .setVersion('1.0.0')
