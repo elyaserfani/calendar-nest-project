@@ -8,6 +8,7 @@ import {
   GetEventResponseDto,
 } from './dto';
 import { NotFoundException } from 'src/exception';
+import { SuccessResponseDto } from 'src/common';
 
 @Injectable()
 export class EventService {
@@ -76,6 +77,25 @@ export class EventService {
     return {
       data: {
         event: event,
+      },
+    };
+  }
+
+  async deleteEvent(
+    eventId: number,
+    userId: number,
+  ): Promise<SuccessResponseDto> {
+    const event = await this.eventRepository.findOneBy({
+      id: eventId,
+      user: { id: userId },
+    });
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+    await this.eventRepository.delete(event.id);
+    return {
+      data: {
+        result: { success: true },
       },
     };
   }
