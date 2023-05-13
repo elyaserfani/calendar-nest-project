@@ -3,13 +3,19 @@ import { EventService } from './event.service';
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { CreateEventRequestDto, CreateEventResponseDto } from './dto';
+import {
+  CreateEventRequestDto,
+  CreateEventResponseDto,
+  EventsResponseDto,
+} from './dto';
 import { JwtAuthGuard } from 'src/guard/jwt.auth.guard';
 import { AuthPayload } from 'src/util/auth.payload';
 import { Auth } from 'src/decorator';
+import { Event } from 'src/entity';
 
 @Controller('events')
 @ApiTags('Event')
@@ -30,5 +36,27 @@ export class EventController {
     @Auth() auth: AuthPayload,
   ): Promise<CreateEventResponseDto> {
     return await this.eventService.createEvent(event, auth.sub);
+  }
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all user events' })
+  @ApiQuery({ name: 'page', type: 'number', required: true, example: 1 })
+  @ApiQuery({ name: 'pageSize', type: 'number', required: true, example: 10 })
+  @ApiResponse({
+    status: 200,
+    description: 'All user events with pagination',
+    type: [EventsResponseDto],
+  })
+  async findAllWithPagination(
+    @Query('page') page = 1,
+    @Query('pageSize') pageSize = 10,
+    @Auth() auth: AuthPayload,
+  ): Promise<{
+    data: Event[];
+    meta: { total: number; page: number; pageSize: number };
+  }> {
+    return await this.eventService.findEvents(page, pageSize, auth.sub);
   }
 }

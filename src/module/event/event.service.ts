@@ -33,4 +33,27 @@ export class EventService {
       },
     };
   }
+
+  async findEvents(
+    page: number,
+    pageSize: number,
+    userId: number,
+  ): Promise<{
+    data: Event[];
+    meta: { total: number; page: number; pageSize: number };
+  }> {
+    const [data, total] = await this.eventRepository.findAndCount({
+      where: { user: { id: userId } },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
+    return {
+      data: data,
+      meta: {
+        total: total,
+        page: Number(page),
+        pageSize: data.length,
+      },
+    };
+  }
 }
