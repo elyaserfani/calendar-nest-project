@@ -30,12 +30,12 @@ import { Event } from 'src/entity';
 import { SuccessResponseDto } from 'src/common';
 
 @Controller('events')
+@UseGuards(JwtAuthGuard)
 @ApiTags('Event')
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new event' })
   @ApiResponse({
@@ -51,7 +51,6 @@ export class EventController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all user events with pagination' })
   @ApiQuery({ name: 'page', type: 'number', required: true, example: 1 })
@@ -73,7 +72,6 @@ export class EventController {
   }
 
   @Get('/:id')
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get single event' })
   @ApiResponse({
@@ -90,7 +88,6 @@ export class EventController {
   }
 
   @Delete('/:id')
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete single event' })
   @ApiResponse({
