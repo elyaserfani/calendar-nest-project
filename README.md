@@ -16,7 +16,7 @@ $ yarn start:dev
 ## Run Unit Tests
 
 ```bash
-$ yarn run test
+$ yarn test
 ```
 
 ## Informations
