@@ -6,6 +6,7 @@ import { EventModule } from './module/event/event.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './util/jwt.strategy';
+import { DatabaseModule } from './module/database/database.module';
 
 @Module({
   imports: [
@@ -15,20 +16,11 @@ import { JwtStrategy } from './util/jwt.strategy';
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'user',
-      password: 'password',
-      database: 'calendardb',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
-    }),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
+    DatabaseModule,
   ],
   exports: [JwtModule],
   providers: [JwtStrategy],
