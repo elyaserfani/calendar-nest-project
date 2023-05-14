@@ -50,7 +50,7 @@ export class EventController {
     @Body() event: CreateEventRequestDto,
     @Auth() auth: AuthPayload,
   ): Promise<CreateEventResponseDto> {
-    return await this.eventService.createEvent(event, auth.sub);
+    return this.eventService.createEvent(event, auth.sub);
   }
 
   @Get()
@@ -71,7 +71,7 @@ export class EventController {
     data: Event[];
     meta: { total: number; page: number; pageSize: number };
   }> {
-    return await this.eventService.findEvents(page, pageSize, auth.sub);
+    return this.eventService.findEvents(page, pageSize, auth.sub);
   }
 
   @Get('/:id')
@@ -87,7 +87,7 @@ export class EventController {
     @Param('id') eventId: number,
     @Auth() auth: AuthPayload,
   ): Promise<GetEventResponseDto> {
-    return await this.eventService.getEvent(eventId, auth.sub);
+    return this.eventService.getEvent(eventId, auth.sub);
   }
 
   @Put('/:id')
@@ -104,7 +104,7 @@ export class EventController {
     @Body() event: UpdateEventRequestDto,
     @Auth() auth: AuthPayload,
   ): Promise<UpdateEventResponseDto> {
-    return await this.eventService.updateEvent(eventId, event, auth.sub);
+    return this.eventService.updateEvent(eventId, event, auth.sub);
   }
 
   @Delete('/:id')
@@ -120,6 +120,6 @@ export class EventController {
     @Param('id') eventId: number,
     @Auth() auth: AuthPayload,
   ): Promise<SuccessResponseDto> {
-    return await this.eventService.deleteEvent(eventId, auth.sub);
+    return this.eventService.deleteEvent(eventId, auth.sub);
   }
 }

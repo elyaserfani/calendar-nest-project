@@ -28,7 +28,7 @@ export class UserController {
   async registerUser(
     @Body() registerRequestDto: RegisterRequestDto,
   ): Promise<RegisterResponseDto> {
-    return await this.userService.registerUser(registerRequestDto);
+    return this.userService.registerUser(registerRequestDto);
   }
 
   @Post('login')
@@ -45,6 +45,6 @@ export class UserController {
   async loginUser(
     @Body() loginRequestDto: LoginRequestDto,
   ): Promise<LoginResponseDto> {
-    return await this.userService.loginUser(loginRequestDto);
+    return this.userService.loginUser(loginRequestDto);
   }
 }
