@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ResponseDto } from 'src/common';
+import { ResponseDto } from 'src/commons';
 
 class Success {
   @ApiProperty()

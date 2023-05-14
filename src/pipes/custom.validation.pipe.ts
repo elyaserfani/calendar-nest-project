@@ -3,7 +3,7 @@ import {
   ValidationPipe,
   ValidationPipeOptions,
 } from '@nestjs/common';
-import { BadRequestException, GlobalExceptionEnum } from 'src/exception';
+import { BadRequestException, GlobalExceptionEnum } from 'src/exceptions';
 
 export class CustomValidationPipe extends ValidationPipe {
   constructor(options?: ValidationPipeOptions) {

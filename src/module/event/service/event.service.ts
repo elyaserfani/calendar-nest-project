@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { NotFoundException } from 'src/exception';
-import { SuccessResponseDto } from 'src/common';
+import { NotFoundException } from 'src/exceptions';
+import { SuccessResponseDto } from 'src/commons';
 import { Event } from '../entity/event.entity';
 import {
   CreateEventRequestDto,

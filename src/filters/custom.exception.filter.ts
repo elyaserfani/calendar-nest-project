@@ -10,7 +10,7 @@ import {
   AppException,
   GlobalExceptionEnum,
   InternalServerException,
-} from 'src/exception';
+} from 'src/exceptions';
 @Catch()
 export class CustomExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(CustomExceptionFilter.name);

@@ -7,8 +7,8 @@ import {
   RegisterResponseDto,
 } from '../dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { BadRequestException, NotFoundException } from 'src/exception';
-import { SwaggerCustomException } from 'src/decorator';
+import { BadRequestException, NotFoundException } from 'src/exceptions';
+import { SwaggerCustomException } from 'src/decorators';
 
 @Controller('users')
 @ApiTags('User')

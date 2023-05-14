@@ -5,7 +5,7 @@ import { RoleModule } from './module/role/role.module';
 import { EventModule } from './module/event/event.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './util/jwt.strategy';
+import { JwtStrategy } from './utils/jwt.strategy';
 import { DatabaseModule } from './module/database/database.module';
 
 @Module({

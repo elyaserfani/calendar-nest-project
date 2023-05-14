@@ -3,8 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserController } from './controller/user.controller';
 import { UserService } from './service/user.service';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtHelper } from 'src/helper/jwt.helper';
-import { DateHelper } from '../../helper';
+import { JwtHelper } from 'src/helpers/jwt.helper';
+import { DateHelper } from '../../helpers';
 import { Role } from '../role/entity/role.entity';
 import { User } from './entity/user.entity';
 

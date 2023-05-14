@@ -25,10 +25,10 @@ import {
   UpdateEventRequestDto,
   UpdateEventResponseDto,
 } from '../dto';
-import { JwtAuthGuard } from 'src/guard/jwt.auth.guard';
-import { AuthPayload } from 'src/util/auth.payload';
-import { Auth, SwaggerCustomException } from 'src/decorator';
-import { SuccessResponseDto } from 'src/common';
+import { JwtAuthGuard } from 'src/guards/jwt.auth.guard';
+import { AuthPayload } from 'src/utils/auth.payload';
+import { Auth, SwaggerCustomException } from 'src/decorators';
+import { SuccessResponseDto } from 'src/commons';
 import { EventService } from '../service/event.service';
 import { Event } from '../entity/event.entity';
 

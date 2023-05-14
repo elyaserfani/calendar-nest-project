@@ -3,7 +3,7 @@ import {
   buildTemplatedApiExceptionDecorator,
 } from '@nanogiants/nestjs-swagger-api-exception-decorator';
 import { HttpException } from '@nestjs/common';
-import { AppException } from 'src/exception';
+import { AppException } from 'src/exceptions';
 
 export const SwaggerCustomException = buildTemplatedApiExceptionDecorator(
   {

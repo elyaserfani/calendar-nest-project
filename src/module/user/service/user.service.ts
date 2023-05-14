@@ -8,8 +8,8 @@ import {
   RegisterRequestDto,
   RegisterResponseDto,
 } from '../dto';
-import { BadRequestException, NotFoundException } from 'src/exception';
-import { JwtHelper } from 'src/helper/jwt.helper';
+import { BadRequestException, NotFoundException } from 'src/exceptions';
+import { JwtHelper } from 'src/helpers/jwt.helper';
 import { Role } from '../../role/entity/role.entity';
 import { User } from '../entity/user.entity';
 

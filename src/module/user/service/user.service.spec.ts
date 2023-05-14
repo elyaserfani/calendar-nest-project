@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { JwtHelper } from '../../../helper/jwt.helper';
+import { JwtHelper } from '../../../helpers/jwt.helper';
 import {
   LoginRequestDto,
   RegisterRequestDto,
@@ -9,8 +9,8 @@ import {
 } from '../dto';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
-import { DateHelper } from '../../../helper';
-import { BadRequestException, NotFoundException } from '../../../exception';
+import { DateHelper } from '../../../helpers';
+import { BadRequestException, NotFoundException } from '../../../exceptions';
 import { JwtService } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
 import { Role } from '../../role/entity/role.entity';
