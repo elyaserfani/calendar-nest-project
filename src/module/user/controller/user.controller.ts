@@ -1,11 +1,11 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { UserService } from './user.service';
+import { UserService } from '../service/user.service';
 import {
   LoginRequestDto,
   LoginResponseDto,
   RegisterRequestDto,
   RegisterResponseDto,
-} from './dto';
+} from '../dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BadRequestException, NotFoundException } from 'src/exception';
 import { SwaggerCustomException } from 'src/decorator';

@@ -2,15 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { Role, User } from 'src/entity';
 import {
   LoginRequestDto,
   LoginResponseDto,
   RegisterRequestDto,
   RegisterResponseDto,
-} from './dto';
+} from '../dto';
 import { BadRequestException, NotFoundException } from 'src/exception';
 import { JwtHelper } from 'src/helper/jwt.helper';
+import { Role } from '../../role/entity/role.entity';
+import { User } from '../entity/user.entity';
 
 @Injectable()
 export class UserService {

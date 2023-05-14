@@ -10,7 +10,6 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { EventService } from './event.service';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -25,12 +24,13 @@ import {
   GetEventResponseDto,
   UpdateEventRequestDto,
   UpdateEventResponseDto,
-} from './dto';
+} from '../dto';
 import { JwtAuthGuard } from 'src/guard/jwt.auth.guard';
 import { AuthPayload } from 'src/util/auth.payload';
 import { Auth, SwaggerCustomException } from 'src/decorator';
-import { Event } from 'src/entity';
 import { SuccessResponseDto } from 'src/common';
+import { EventService } from '../service/event.service';
+import { Event } from '../entity/event.entity';
 
 @Controller('events')
 @UseGuards(JwtAuthGuard)

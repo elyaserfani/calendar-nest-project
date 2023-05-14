@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Event } from 'src/entity';
 import { Repository } from 'typeorm';
+import { NotFoundException } from 'src/exception';
+import { SuccessResponseDto } from 'src/common';
+import { Event } from '../entity/event.entity';
 import {
   CreateEventRequestDto,
   CreateEventResponseDto,
   GetEventResponseDto,
   UpdateEventRequestDto,
   UpdateEventResponseDto,
-} from './dto';
-import { NotFoundException } from 'src/exception';
-import { SuccessResponseDto } from 'src/common';
+} from '../dto';
 
 @Injectable()
 export class EventService {

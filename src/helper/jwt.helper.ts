@@ -1,8 +1,8 @@
 import { Inject, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/entity';
 import { AuthPayload } from 'src/util/auth.payload';
 import { DateHelper } from './date.helper';
+import { User } from '../module/user/entity/user.entity';
 
 export class JwtHelper {
   constructor(
