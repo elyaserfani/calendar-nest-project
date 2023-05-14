@@ -3,7 +3,11 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Role, User } from '../../entity';
 import { JwtHelper } from '../../helper/jwt.helper';
-import { LoginRequestDto, RegisterRequestDto } from './dto';
+import {
+  LoginRequestDto,
+  RegisterRequestDto,
+  RegisterResponseDto,
+} from './dto';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
 import { DateHelper } from '../../helper';
@@ -49,11 +53,105 @@ describe('UserService', () => {
   });
 
   describe('registerUser', () => {
-    it('should register a new user', async () => {});
+    it('should register a new user', async () => {
+      const registerRequestDto: RegisterRequestDto = {
+        username: 'testuser',
+        email: 'testuser@test.com',
+        password: 'password123',
+        nickname: 'Test User',
+        role: 'ROLE_USER',
+      };
 
-    it('should throw a BadRequestException if user already exists', async () => {});
+      jest.spyOn(userRepository, 'findOneBy').mockResolvedValueOnce(undefined);
+      jest.spyOn(roleRepository, 'findOneBy').mockResolvedValueOnce({
+        id: 1,
+        name: 'ROLE_USER',
+        created_at: new Date(),
+        updated_at: new Date(),
+        users: null,
+      });
+      jest.spyOn(userRepository, 'create').mockReturnValueOnce({
+        id: 1,
+        username: 'testuser',
+        email: 'testuser@test.com',
+        password: 'hashedpassword',
+        nickname: 'Test User',
+        role: 'ROLE_USER',
+        created_at: new Date(),
+        updated_at: new Date(),
+        events: null,
+      });
+      jest.spyOn(userRepository, 'save').mockResolvedValueOnce({
+        id: 1,
+        username: 'testuser',
+        email: 'testuser@test.com',
+        password: 'hashedpassword',
+        nickname: 'Test User',
+        role: 'ROLE_USER',
+        created_at: new Date(),
+        updated_at: new Date(),
+        events: null,
+      });
+      jest.spyOn(jwtHelper, 'generateToken').mockResolvedValueOnce('testtoken');
+      const expected: RegisterResponseDto = {
+        data: {
+          user: {
+            id: 1,
+            username: 'testuser',
+            email: 'testuser@test.com',
+            nickname: 'Test User',
+            role: 'ROLE_USER',
+            accessToken: 'testtoken',
+          },
+        },
+      };
 
-    it('should throw a NotFoundException if role does not exists', async () => {});
+      const result = await userService.registerUser(registerRequestDto);
+      expect(result).toEqual(expected);
+    });
+
+    it('should throw a BadRequestException if user already exists', async () => {
+      const registerRequestDto: RegisterRequestDto = {
+        username: 'testuser',
+        email: 'testuser@test.com',
+        password: 'password123',
+        nickname: 'Test User',
+        role: 'ROLE_USER',
+      };
+
+      jest.spyOn(userRepository, 'findOneBy').mockResolvedValueOnce({
+        id: 1,
+        username: 'testuser',
+        email: 'testuser@test.com',
+        password: 'hashedpassword',
+        nickname: 'Test User',
+        role: 'ROLE_USER',
+        created_at: new Date(),
+        updated_at: new Date(),
+        events: null,
+      });
+
+      await expect(
+        userService.registerUser(registerRequestDto),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw a NotFoundException if role does not exists', async () => {
+      const registerRequestDto: RegisterRequestDto = {
+        username: 'testuser',
+        email: 'testuser@test.com',
+        password: 'password123',
+        nickname: 'Test User',
+        role: 'INVALID_ROLE',
+      };
+
+      jest.spyOn(userRepository, 'findOneBy').mockResolvedValueOnce(undefined);
+      jest.spyOn(roleRepository, 'findOneBy').mockResolvedValueOnce(undefined);
+
+      await expect(
+        userService.registerUser(registerRequestDto),
+      ).rejects.toThrow(NotFoundException);
+    });
   });
 
   describe('loginUser', () => {
