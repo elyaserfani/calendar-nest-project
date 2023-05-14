@@ -2,13 +2,16 @@ import { Inject, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/entity';
 import { AuthPayload } from 'src/util/auth.payload';
-import { DateHelper } from 'src/util/date.helper';
+import { DateHelper } from './date.helper';
 
 export class JwtHelper {
-  constructor(@Inject(JwtService) private readonly jwtService: JwtService) {}
+  constructor(
+    @Inject(JwtService) private readonly jwtService: JwtService,
+    private readonly dateHelper: DateHelper,
+  ) {}
 
   async generateToken(user: User): Promise<string> {
-    const iat = DateHelper.getCurrentTimestamp();
+    const iat = this.dateHelper.getCurrentTimestamp();
     const expiresIn = 60 * 60 * 24; //1 Day In Seconds
     const payload: AuthPayload = {
       sub: user.id,
