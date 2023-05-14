@@ -24,13 +24,13 @@ import {
   GetEventResponseDto,
   UpdateEventRequestDto,
   UpdateEventResponseDto,
-} from '../dto';
+} from '../module/event/dto';
 import { JwtAuthGuard } from 'src/guards/jwt.auth.guard';
 import { AuthPayload } from 'src/utils/auth.payload';
 import { Auth, SwaggerCustomException } from 'src/decorators';
 import { SuccessResponseDto } from 'src/commons';
-import { EventService } from '../service/event.service';
-import { Event } from '../entity/event.entity';
+import { EventService } from '../module/event/service/event.service';
+import { Event } from '../module/event/entity/event.entity';
 
 @Controller('events')
 @UseGuards(JwtAuthGuard)

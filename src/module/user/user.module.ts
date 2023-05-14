@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserController } from './controller/user.controller';
+import { UserController } from '../../controllers/user.controller';
 import { UserService } from './service/user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtHelper } from 'src/helpers/jwt.helper';
