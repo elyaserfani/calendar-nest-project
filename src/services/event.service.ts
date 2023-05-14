@@ -3,14 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { NotFoundException } from 'src/exceptions';
 import { SuccessResponseDto } from 'src/commons';
-import { Event } from '../entity/event.entity';
+import { Event } from '../entities/event.entity';
 import {
   CreateEventRequestDto,
   CreateEventResponseDto,
   GetEventResponseDto,
   UpdateEventRequestDto,
   UpdateEventResponseDto,
-} from '../dto';
+} from 'src/dtos/events';
 
 @Injectable()
 export class EventService {

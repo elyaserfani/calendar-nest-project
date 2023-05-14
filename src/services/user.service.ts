@@ -7,11 +7,11 @@ import {
   LoginResponseDto,
   RegisterRequestDto,
   RegisterResponseDto,
-} from '../dto';
+} from '../dtos/users';
 import { BadRequestException, NotFoundException } from 'src/exceptions';
 import { JwtHelper } from 'src/helpers/jwt.helper';
-import { Role } from '../../role/entity/role.entity';
-import { User } from '../entity/user.entity';
+import { Role } from '../entities/role.entity';
+import { User } from '../entities/user.entity';
 
 @Injectable()
 export class UserService {

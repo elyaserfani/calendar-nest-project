@@ -1,20 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { JwtHelper } from '../../../helpers/jwt.helper';
-import {
-  LoginRequestDto,
-  RegisterRequestDto,
-  RegisterResponseDto,
-} from '../dto';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
-import { DateHelper } from '../../../helpers';
-import { BadRequestException, NotFoundException } from '../../../exceptions';
 import { JwtService } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
-import { Role } from '../../role/entity/role.entity';
-import { User } from '../entity/user.entity';
+import {
+  RegisterRequestDto,
+  RegisterResponseDto,
+  LoginRequestDto,
+} from 'src/dtos/users';
+import { User, Role } from 'src/entities';
+import { JwtHelper, DateHelper } from 'src/helpers';
+import { BadRequestException, NotFoundException } from 'src/exceptions';
 
 describe('UserService', () => {
   let userService: UserService;

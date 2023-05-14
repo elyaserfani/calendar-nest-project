@@ -1,16 +1,22 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { User } from '../../user/entity/user.entity';
+import { Event } from './event.entity';
 
 @Entity()
-export class Role {
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  name: string;
+  username: string;
 
-  @OneToMany(() => User, (user) => user.role)
-  users: User[];
+  @Column()
+  email: string;
+
+  @Column()
+  password: string;
+
+  @Column()
+  nickname: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
@@ -21,4 +27,10 @@ export class Role {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updated_at: Date;
+
+  @Column()
+  role: string;
+
+  @OneToMany(() => Event, (event) => event.user)
+  events: Event[];
 }

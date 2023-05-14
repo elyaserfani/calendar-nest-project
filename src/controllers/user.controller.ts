@@ -1,14 +1,14 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { UserService } from '../module/user/service/user.service';
-import {
-  LoginRequestDto,
-  LoginResponseDto,
-  RegisterRequestDto,
-  RegisterResponseDto,
-} from '../module/user/dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BadRequestException, NotFoundException } from 'src/exceptions';
 import { SwaggerCustomException } from 'src/decorators';
+import {
+  RegisterResponseDto,
+  RegisterRequestDto,
+  LoginResponseDto,
+  LoginRequestDto,
+} from 'src/dtos/users';
+import { UserService } from 'src/services';
 
 @Controller('users')
 @ApiTags('User')

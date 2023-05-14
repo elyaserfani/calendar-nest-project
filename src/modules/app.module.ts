@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './module/user/user.module';
-import { RoleModule } from './module/role/role.module';
-import { EventModule } from './module/event/event.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './utils/jwt.strategy';
-import { DatabaseModule } from './module/database/database.module';
+import { DatabaseModule } from './database.module';
+import { EventModule } from './event.module';
+import { RoleModule } from './role.module';
+import { UserModule } from './user.module';
+import { JwtStrategy } from 'src/utils';
 
 @Module({
   imports: [

@@ -17,20 +17,20 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import {
-  CreateEventRequestDto,
-  CreateEventResponseDto,
-  EventsResponseDto,
-  GetEventResponseDto,
-  UpdateEventRequestDto,
-  UpdateEventResponseDto,
-} from '../module/event/dto';
-import { JwtAuthGuard } from 'src/guards/jwt.auth.guard';
-import { AuthPayload } from 'src/utils/auth.payload';
 import { Auth, SwaggerCustomException } from 'src/decorators';
 import { SuccessResponseDto } from 'src/commons';
-import { EventService } from '../module/event/service/event.service';
-import { Event } from '../module/event/entity/event.entity';
+import {
+  CreateEventResponseDto,
+  CreateEventRequestDto,
+  EventsResponseDto,
+  GetEventResponseDto,
+  UpdateEventResponseDto,
+  UpdateEventRequestDto,
+} from 'src/dtos/events';
+import { EventService } from 'src/services';
+import { Event } from 'src/entities';
+import { JwtAuthGuard } from 'src/guards';
+import { AuthPayload } from 'src/utils';
 
 @Controller('events')
 @UseGuards(JwtAuthGuard)
