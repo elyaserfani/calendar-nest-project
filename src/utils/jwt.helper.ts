@@ -1,9 +1,8 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { DateHelper } from './date.helper';
 import { User } from 'src/entities';
 import { AuthPayload } from 'src/utils';
-import { CustomConfigService } from 'src/services';
 
 @Injectable()
 export class JwtHelper {
