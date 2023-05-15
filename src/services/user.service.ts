@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import {
   LoginRequestDto,
@@ -9,45 +7,45 @@ import {
   RegisterResponseDto,
 } from '../dtos/users';
 import { BadRequestException, NotFoundException } from 'src/exceptions';
-import { JwtHelper } from 'src/helpers/jwt.helper';
-import { Role } from '../entities/role.entity';
-import { User } from '../entities/user.entity';
+import { JwtHelper } from 'src/utils';
+import { CustomConfigService } from './custom.config.service';
+import { RoleRepository } from 'src/modules/role/role.repository';
+import { UserRepository } from 'src/modules/user/user.repository';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-    @InjectRepository(Role)
-    private readonly roleRepository: Repository<Role>,
+    private readonly userRepository: UserRepository,
+    private readonly roleRepository: RoleRepository,
     private readonly jwtHelper: JwtHelper,
+    private readonly customConfigService: CustomConfigService,
   ) {}
 
   async registerUser(
     registerRequestDto: RegisterRequestDto,
   ): Promise<RegisterResponseDto> {
-    const user = await this.userRepository.findOneBy({
-      username: registerRequestDto.username,
-    });
+    const user = await this.userRepository.findByUsername(
+      registerRequestDto.username,
+    );
     if (user) {
       throw new BadRequestException('User with this username already exists');
     }
-    const role = await this.roleRepository.findOneBy({
-      name: registerRequestDto.role,
-    });
+    const role = await this.roleRepository.findByName(registerRequestDto.role);
     if (!role) {
       throw new NotFoundException('Role not found');
     }
     const hashedPassword = await bcrypt.hash(registerRequestDto.password, 10);
-    const newUser = this.userRepository.create({
+    const savedUser = await this.userRepository.createUser({
       username: registerRequestDto.username,
       email: registerRequestDto.email,
       password: hashedPassword,
       nickname: registerRequestDto.nickname,
       role: registerRequestDto.role,
     });
-    const savedUser = await this.userRepository.save(newUser);
-    const token = await this.jwtHelper.generateToken(savedUser);
+    const token = await this.jwtHelper.generateToken(
+      savedUser,
+      this.customConfigService.getJwtSecret(),
+    );
     return {
       data: {
         user: {
@@ -63,9 +61,9 @@ export class UserService {
   }
 
   async loginUser(loginRequestDto: LoginRequestDto): Promise<LoginResponseDto> {
-    const user = await this.userRepository.findOneBy({
-      username: loginRequestDto.username,
-    });
+    const user = await this.userRepository.findByUsername(
+      loginRequestDto.username,
+    );
     if (!user) {
       throw new NotFoundException('User with this username not found');
     }
@@ -76,7 +74,10 @@ export class UserService {
     if (!isPasswordValid) {
       throw new BadRequestException('Invalid credentials');
     }
-    const token = await this.jwtHelper.generateToken(user);
+    const token = await this.jwtHelper.generateToken(
+      user,
+      this.customConfigService.getJwtSecret(),
+    );
     return {
       data: {
         user: {
