@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { UserService } from '../../services/user.service';
+import { UserService } from './user.service';
 import { JwtModule } from '@nestjs/jwt';
-import { UtilityModule } from '../utility/utility.module';
 import { DatabaseModule } from '../database/database.module';
 import { RoleRepository } from '../role/role.repository';
 import { UserRepository } from './user.repository';
+import { UtilityModule } from '../utility';
 
 @Module({
   imports: [DatabaseModule, JwtModule, UtilityModule],
