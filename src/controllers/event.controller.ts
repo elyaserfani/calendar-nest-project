@@ -28,7 +28,6 @@ import {
   UpdateEventRequestDto,
 } from 'src/dtos/events';
 import { EventService } from 'src/services';
-import { Event } from 'src/entities';
 import { JwtAuthGuard } from 'src/guards';
 import { AuthPayload } from 'src/utils';
 
@@ -67,10 +66,7 @@ export class EventController {
     @Query('page') page = 1,
     @Query('pageSize') pageSize = 10,
     @Auth() auth: AuthPayload,
-  ): Promise<{
-    data: Event[];
-    meta: { total: number; page: number; pageSize: number };
-  }> {
+  ): Promise<EventsResponseDto> {
     return this.eventService.findEvents(page, pageSize, auth.sub);
   }
 

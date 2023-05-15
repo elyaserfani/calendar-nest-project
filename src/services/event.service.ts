@@ -7,6 +7,7 @@ import { Event } from '../entities/event.entity';
 import {
   CreateEventRequestDto,
   CreateEventResponseDto,
+  EventsResponseDto,
   GetEventResponseDto,
   UpdateEventRequestDto,
   UpdateEventResponseDto,
@@ -46,10 +47,7 @@ export class EventService {
     page: number,
     pageSize: number,
     userId: number,
-  ): Promise<{
-    data: Event[];
-    meta: { total: number; page: number; pageSize: number };
-  }> {
+  ): Promise<EventsResponseDto> {
     const [data, total] = await this.eventRepository.findAndCount({
       where: { user: { id: userId } },
       skip: (page - 1) * pageSize,
