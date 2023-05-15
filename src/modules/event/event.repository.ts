@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { IEventRepository } from './interfaces';
+import { IEventRepository } from '../../interfaces';
 import { Event } from 'src/entities';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 

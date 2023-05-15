@@ -9,7 +9,8 @@ import {
 import { BadRequestException, NotFoundException } from 'src/exceptions';
 import { JwtHelper } from 'src/utils';
 import { CustomConfigService } from './custom.config.service';
-import { RoleRepository, UserRepository } from 'src/repositories';
+import { RoleRepository } from 'src/modules/role/role.repository';
+import { UserRepository } from 'src/modules/user/user.repository';
 
 @Injectable()
 export class UserService {

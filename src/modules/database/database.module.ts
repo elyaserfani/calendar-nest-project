@@ -1,5 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { EventRepository } from '../event/event.repository';
+import { RoleRepository } from '../role/role.repository';
+import { UserRepository } from '../user/user.repository';
+import { User, Role, Event } from 'src/entities';
 
 @Module({
   imports: [
@@ -11,10 +15,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: process.env.DATABASE_USERNAME,
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_DB_NAME,
-        entities: [__dirname + '/../**/*.entity.{js,ts}'],
+        entities: [Role, User, Event],
         synchronize: true,
       }),
     }),
+    TypeOrmModule.forFeature([User, Role, Event]),
   ],
+  exports: [TypeOrmModule, UserRepository, EventRepository, RoleRepository],
+  providers: [UserRepository, EventRepository, RoleRepository],
 })
 export class DatabaseModule {}

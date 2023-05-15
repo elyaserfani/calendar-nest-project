@@ -1,16 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { DatabaseModule } from './database.module';
-import { EventModule } from './event.module';
-import { RoleModule } from './role.module';
-import { UserModule } from './user.module';
+import { DatabaseModule } from './database/database.module';
+import { EventModule } from './event/event.module';
+import { RoleModule } from './role/role.module';
+import { UserModule } from './user/user.module';
 import { JwtStrategy } from 'src/utils';
 import * as Joi from 'joi';
-import { UtilityModule } from './utility.module';
+import { UtilityModule } from './utility/utility.module';
 
 @Module({
   imports: [
+    DatabaseModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
       validationSchema: Joi.object({
@@ -29,7 +30,6 @@ import { UtilityModule } from './utility.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
-    DatabaseModule,
     UtilityModule,
   ],
   exports: [JwtModule],
