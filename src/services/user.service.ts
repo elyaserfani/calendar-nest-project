@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import {
   LoginRequestDto,
@@ -9,17 +7,15 @@ import {
   RegisterResponseDto,
 } from '../dtos/users';
 import { BadRequestException, NotFoundException } from 'src/exceptions';
-import { Role } from '../entities/role.entity';
 import { JwtHelper } from 'src/utils';
 import { CustomConfigService } from './custom.config.service';
-import { UserRepository } from 'src/repositories';
+import { RoleRepository, UserRepository } from 'src/repositories';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
-    @InjectRepository(Role)
-    private readonly roleRepository: Repository<Role>,
+    private readonly roleRepository: RoleRepository,
     private readonly jwtHelper: JwtHelper,
     private readonly customConfigService: CustomConfigService,
   ) {}
@@ -33,9 +29,7 @@ export class UserService {
     if (user) {
       throw new BadRequestException('User with this username already exists');
     }
-    const role = await this.roleRepository.findOneBy({
-      name: registerRequestDto.role,
-    });
+    const role = await this.roleRepository.findByName(registerRequestDto.role);
     if (!role) {
       throw new NotFoundException('Role not found');
     }

@@ -8,7 +8,7 @@ import { User } from '../entities/user.entity';
 import { UtilityModule } from './utility.module';
 import { CustomConfigService } from 'src/services';
 import { ConfigModule } from '@nestjs/config';
-import { UserRepository } from 'src/repositories';
+import { RoleRepository, UserRepository } from 'src/repositories';
 
 @Module({
   imports: [
@@ -18,6 +18,6 @@ import { UserRepository } from 'src/repositories';
     ConfigModule,
   ],
   controllers: [UserController],
-  providers: [UserService, UserRepository, CustomConfigService],
+  providers: [UserService, UserRepository, RoleRepository, CustomConfigService],
 })
 export class UserModule {}
