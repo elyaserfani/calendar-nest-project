@@ -9,9 +9,10 @@ import {
   RegisterResponseDto,
 } from '../dtos/users';
 import { BadRequestException, NotFoundException } from 'src/exceptions';
-import { JwtHelper } from 'src/helpers/jwt.helper';
 import { Role } from '../entities/role.entity';
 import { User } from '../entities/user.entity';
+import { JwtHelper } from 'src/utils';
+import { CustomConfigService } from './custom.config.service';
 
 @Injectable()
 export class UserService {
@@ -21,6 +22,7 @@ export class UserService {
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
     private readonly jwtHelper: JwtHelper,
+    private readonly customConfigService: CustomConfigService,
   ) {}
 
   async registerUser(
@@ -47,7 +49,10 @@ export class UserService {
       role: registerRequestDto.role,
     });
     const savedUser = await this.userRepository.save(newUser);
-    const token = await this.jwtHelper.generateToken(savedUser);
+    const token = await this.jwtHelper.generateToken(
+      savedUser,
+      this.customConfigService.getJwtSecret(),
+    );
     return {
       data: {
         user: {
@@ -76,7 +81,10 @@ export class UserService {
     if (!isPasswordValid) {
       throw new BadRequestException('Invalid credentials');
     }
-    const token = await this.jwtHelper.generateToken(user);
+    const token = await this.jwtHelper.generateToken(
+      user,
+      this.customConfigService.getJwtSecret(),
+    );
     return {
       data: {
         user: {
