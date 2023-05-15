@@ -12,25 +12,20 @@ import {
   UpdateEventRequestDto,
   UpdateEventResponseDto,
 } from 'src/dtos/events';
+import { EventRepository } from 'src/repositories';
 
 @Injectable()
 export class EventService {
-  constructor(
-    @InjectRepository(Event)
-    private eventRepository: Repository<Event>,
-  ) {}
+  constructor(private eventRepository: EventRepository) {}
 
   async createEvent(
     createEventRequestDto: CreateEventRequestDto,
     userId: number,
   ): Promise<CreateEventResponseDto> {
-    const newEvent = this.eventRepository.create({
-      title: createEventRequestDto.title,
-      description: createEventRequestDto.description,
-      due_date: createEventRequestDto.due_date,
-      user: { id: userId },
-    });
-    const savedEvent = await this.eventRepository.save(newEvent);
+    const savedEvent = await this.eventRepository.createEvent(
+      createEventRequestDto,
+      userId,
+    );
     return {
       data: {
         event: {
@@ -48,11 +43,11 @@ export class EventService {
     pageSize: number,
     userId: number,
   ): Promise<EventsResponseDto> {
-    const [data, total] = await this.eventRepository.findAndCount({
-      where: { user: { id: userId } },
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-    });
+    const [data, total] = await this.eventRepository.pagination(
+      userId,
+      page,
+      pageSize,
+    );
     return {
       data: data,
       meta: {
@@ -67,10 +62,10 @@ export class EventService {
     eventId: number,
     userId: number,
   ): Promise<GetEventResponseDto> {
-    const event = await this.eventRepository.findOneBy({
-      id: eventId,
-      user: { id: userId },
-    });
+    const event = await this.eventRepository.checkEventOwnership(
+      eventId,
+      userId,
+    );
     if (!event) {
       throw new NotFoundException('Event not found');
     }
@@ -86,20 +81,20 @@ export class EventService {
     updateEventRequestDto: UpdateEventRequestDto,
     userId: number,
   ): Promise<UpdateEventResponseDto> {
-    const event = await this.eventRepository.findOneBy({
-      id: eventId,
-      user: { id: userId },
-    });
+    const event = await this.eventRepository.checkEventOwnership(
+      eventId,
+      userId,
+    );
     if (!event) {
       throw new NotFoundException('Event not found');
     }
-    await this.eventRepository.update(eventId, {
+    await this.eventRepository.updateEvent(eventId, {
       title: updateEventRequestDto.title,
       description: updateEventRequestDto.description,
       due_date: updateEventRequestDto.due_date,
       updated_at: new Date(),
     });
-    const updatedEvent = await this.eventRepository.findOneBy({ id: eventId });
+    const updatedEvent = await this.eventRepository.findById(eventId);
     return {
       data: {
         event: {
@@ -118,14 +113,14 @@ export class EventService {
     eventId: number,
     userId: number,
   ): Promise<SuccessResponseDto> {
-    const event = await this.eventRepository.findOneBy({
-      id: eventId,
-      user: { id: userId },
-    });
+    const event = await this.eventRepository.checkEventOwnership(
+      eventId,
+      userId,
+    );
     if (!event) {
       throw new NotFoundException('Event not found');
     }
-    await this.eventRepository.delete(event.id);
+    await this.eventRepository.deleteEvent(event.id);
     return {
       data: {
         result: { success: true },
