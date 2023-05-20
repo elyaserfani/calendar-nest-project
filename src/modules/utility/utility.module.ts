@@ -9,6 +9,7 @@ import {
   JwtStrategy,
   CustomConfigService,
   EventScheduler,
+  NotificationServiceFactory,
 } from 'src/utils';
 import { DatabaseModule } from '../database';
 
@@ -37,6 +38,7 @@ import { DatabaseModule } from '../database';
     DateHelper,
     CustomConfigService,
     EventScheduler,
+    NotificationServiceFactory,
   ],
   exports: [JwtHelper, JwtStrategy, DateHelper, CustomConfigService],
 })

@@ -6,9 +6,9 @@ import {
   Repository,
   UpdateResult,
 } from 'typeorm';
-import { IEventRepository } from '../../interfaces';
 import { Event } from 'src/entities';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { IEventRepository } from 'src/interfaces/repositories';
 
 @Injectable()
 export class EventRepository implements IEventRepository {

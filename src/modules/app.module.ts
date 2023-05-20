@@ -13,6 +13,7 @@ import {
   UserController,
 } from 'src/controllers';
 import { UtilityModule } from './utility';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { UtilityModule } from './utility';
       signOptions: { expiresIn: '1d' },
     }),
     UtilityModule,
+    NotificationModule,
   ],
   exports: [JwtModule],
   providers: [JwtStrategy],
