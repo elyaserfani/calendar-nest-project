@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { DatabaseModule } from '../database/database.module';
-import { RoleRepository } from '../role/role.repository';
-import { UserRepository } from './user.repository';
+import { RoleRepository } from '../database/role.repository';
+import { UserRepository } from '../database/user.repository';
 import { UtilityModule } from '../utility';
 
 @Module({

@@ -1,3 +1,3 @@
 export * from './user.module';
-export * from './user.repository';
+export * from '../database/user.repository';
 export * from './user.service';
