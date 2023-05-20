@@ -12,12 +12,10 @@ import {
 } from 'src/dtos/users';
 import { User, Role } from 'src/entities';
 import { BadRequestException, NotFoundException } from 'src/exceptions';
-import { JwtHelper, DateHelper, CustomConfigService } from 'src/utils';
+import { JwtHelper, DateHelper } from 'src/utils';
 import { UserRepository } from './user.repository';
 import { RoleRepository } from '../role';
-import { ConfigModule } from '@nestjs/config';
 import { UtilityModule } from '../utility';
-import { DatabaseModule } from '../database';
 
 describe('UserService', () => {
   let userService: UserService;
