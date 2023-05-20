@@ -9,7 +9,7 @@ import {
   UpdateEventRequestDto,
   UpdateEventResponseDto,
 } from 'src/dtos/events';
-import { EventRepository } from 'src/modules/event/event.repository';
+import { EventRepository } from './event.repository';
 
 @Injectable()
 export class EventService {
