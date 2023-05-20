@@ -1,8 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { CustomConfigService } from 'src/services';
-import { JwtHelper, DateHelper, JwtStrategy } from 'src/utils';
+import {
+  JwtHelper,
+  DateHelper,
+  JwtStrategy,
+  CustomConfigService,
+} from 'src/utils';
 
 @Module({
   imports: [JwtModule, ConfigModule],

@@ -5,18 +5,27 @@ import { IUserRepository } from '../../interfaces';
 import { User } from 'src/entities';
 
 @Injectable()
-export class UserRepository implements IUserRepository {
+export class UserRepository
+  extends Repository<User>
+  implements IUserRepository
+{
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {}
+  ) {
+    super(
+      userRepository.target,
+      userRepository.manager,
+      userRepository.queryRunner,
+    );
+  }
 
   findByUsername(username: string): Promise<User> {
-    return this.userRepository.findOneBy({ username });
+    return this.findOneBy({ username });
   }
 
   async createUser(userData: Partial<User>): Promise<User> {
-    const user = this.userRepository.create(userData);
-    return this.userRepository.save(user);
+    const user = this.create(userData);
+    return this.save(user);
   }
 }

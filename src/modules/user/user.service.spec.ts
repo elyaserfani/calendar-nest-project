@@ -11,20 +11,25 @@ import {
   LoginRequestDto,
 } from 'src/dtos/users';
 import { User, Role } from 'src/entities';
-import { JwtHelper, DateHelper } from 'src/helpers';
 import { BadRequestException, NotFoundException } from 'src/exceptions';
+import { JwtHelper, DateHelper } from 'src/utils';
+import { UserRepository } from './user.repository';
+import { RoleRepository } from '../role';
+import { UtilityModule } from '../utility';
 
 describe('UserService', () => {
   let userService: UserService;
-  let userRepository: Repository<User>;
-  let roleRepository: Repository<Role>;
+  let userRepository: UserRepository;
+  let roleRepository: RoleRepository;
   let jwtHelper: JwtHelper;
-  let dateHelper: DateHelper;
 
   beforeEach(async () => {
     dotenv.config();
     const module: TestingModule = await Test.createTestingModule({
+      imports: [UtilityModule],
       providers: [
+        UserRepository,
+        RoleRepository,
         UserService,
         JwtService,
         JwtHelper,
@@ -39,12 +44,10 @@ describe('UserService', () => {
         },
       ],
     }).compile();
-
+    userRepository = module.get<UserRepository>(UserRepository);
+    roleRepository = module.get<RoleRepository>(RoleRepository);
     userService = module.get<UserService>(UserService);
-    userRepository = module.get<Repository<User>>(getRepositoryToken(User));
-    roleRepository = module.get<Repository<Role>>(getRepositoryToken(Role));
     jwtHelper = module.get<JwtHelper>(JwtHelper);
-    dateHelper = module.get<DateHelper>(DateHelper);
   });
 
   afterEach(() => {
@@ -100,7 +103,7 @@ describe('UserService', () => {
             email: 'testuser@test.com',
             nickname: 'Test User',
             role: 'ROLE_USER',
-            accessToken: 'testtoken',
+            accessToken: expect.any(String),
           },
         },
       };

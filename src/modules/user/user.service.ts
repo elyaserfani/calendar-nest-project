@@ -5,10 +5,10 @@ import {
   LoginResponseDto,
   RegisterRequestDto,
   RegisterResponseDto,
-} from '../dtos/users';
+} from '../../dtos/users';
 import { BadRequestException, NotFoundException } from 'src/exceptions';
 import { JwtHelper } from 'src/utils';
-import { CustomConfigService } from './custom.config.service';
+import { CustomConfigService } from '../../utils/custom.config.service';
 import { RoleRepository } from 'src/modules/role/role.repository';
 import { UserRepository } from 'src/modules/user/user.repository';
 

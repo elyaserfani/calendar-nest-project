@@ -8,7 +8,7 @@ import {
   LoginResponseDto,
   LoginRequestDto,
 } from 'src/dtos/users';
-import { UserService } from 'src/services';
+import { UserService } from 'src/modules/user';
 
 @Controller('users')
 @ApiTags('User')
