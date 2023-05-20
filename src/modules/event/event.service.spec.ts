@@ -42,7 +42,7 @@ describe('EventsService', () => {
   });
 
   describe('createEvent', () => {
-    it('should create an event and return the response', async () => {
+    it('should accept CreateEventRequestDto and create an event and return the response', async () => {
       const createEventRequestDto: CreateEventRequestDto = {
         title: 'Event title',
         description: 'Event description',
@@ -164,7 +164,7 @@ describe('EventsService', () => {
     });
   });
   describe('updateEvent', () => {
-    it('should update the event and return the updated event response when it exists', async () => {
+    it('should accept UpdateEventRequestDto and update event and return the updated event response when it exists', async () => {
       const eventId = 1;
       const userId = 123;
       const updateEventRequestDto: UpdateEventRequestDto = {
