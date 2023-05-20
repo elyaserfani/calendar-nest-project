@@ -13,7 +13,7 @@ import {
 import { User, Role } from 'src/entities';
 import { BadRequestException, NotFoundException } from 'src/exceptions';
 import { JwtHelper, DateHelper } from 'src/utils';
-import { UserRepository } from './user.repository';
+import { UserRepository } from '../database/user.repository';
 import { RoleRepository } from '../role';
 import { UtilityModule } from '../utility';
 

@@ -6,7 +6,7 @@ import * as dotenv from 'dotenv';
 import { Event } from 'src/entities';
 import { JwtHelper, DateHelper } from 'src/utils';
 import { CreateEventRequestDto, UpdateEventRequestDto } from 'src/dtos/events';
-import { EventRepository } from './event.repository';
+import { EventRepository } from '../database/event.repository';
 import { EventService } from './event.service';
 import { NotFoundException } from 'src/exceptions';
 

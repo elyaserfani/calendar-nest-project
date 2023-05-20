@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { EventService } from './event.service';
-import { EventRepository } from 'src/modules/event/event.repository';
+import { EventRepository } from 'src/modules/database/event.repository';
 import { DatabaseModule } from '../database/database.module';
 
 @Module({
