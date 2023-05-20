@@ -9,6 +9,7 @@ import { CreateEventRequestDto, CreateEventResponseDto } from 'src/dtos/events';
 import { UtilityModule } from '../utility';
 import { EventRepository } from './event.repository';
 import { EventService } from './event.service';
+import { NotFoundException } from 'src/exceptions';
 
 describe('EventsService', () => {
   let eventService: EventService;
@@ -123,6 +124,45 @@ describe('EventsService', () => {
           pageSize: eventData.length,
         },
       });
+    });
+  });
+
+  describe('getEvent', () => {
+    it('should return the event response when it exists', async () => {
+      const eventId = 1;
+      const userId = 123;
+      const event = {
+        id: eventId,
+        title: 'Event 1',
+        description: 'Description 1',
+        due_date: new Date(),
+        user: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+      jest
+        .spyOn(eventRepository, 'checkEventOwnership')
+        .mockResolvedValue(event);
+      const response = await eventService.getEvent(eventId, userId);
+      expect(eventRepository.checkEventOwnership).toHaveBeenCalledWith(
+        eventId,
+        userId,
+      );
+      expect(response).toEqual({
+        data: {
+          event: event,
+        },
+      });
+    });
+    it('should throw NotFoundException when event does not exist', async () => {
+      const eventId = 1;
+      const userId = 123;
+      jest
+        .spyOn(eventRepository, 'checkEventOwnership')
+        .mockResolvedValue(null);
+      await expect(eventService.getEvent(eventId, userId)).rejects.toThrowError(
+        NotFoundException,
+      );
     });
   });
 });
