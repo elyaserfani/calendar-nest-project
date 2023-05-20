@@ -1,14 +1,11 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { InjectRepository } from '@nestjs/typeorm';
 import { EventRepository } from 'src/modules/database';
-import { LessThanOrEqual } from 'typeorm';
 
 @Injectable()
 export class EventScheduler {
   constructor(
-    @InjectRepository(Event)
     private readonly eventRepository: EventRepository,
     private readonly mailerService: MailerService,
   ) {}
@@ -16,7 +13,7 @@ export class EventScheduler {
   @Cron('*/5 * * * * *') //Run every 5 second
   async sendEventReminders() {
     const currentDate = new Date();
-    const events = await this.eventRepository.findNotNotifiedEvent(
+    const events = await this.eventRepository.findNotNotifiedEvents(
       currentDate,
       false,
     );

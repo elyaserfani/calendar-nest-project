@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import {
+  DeleteResult,
+  LessThanOrEqual,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { IEventRepository } from '../../interfaces';
 import { Event } from 'src/entities';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
@@ -50,9 +55,9 @@ export class EventRepository implements IEventRepository {
     return this.eventRepository.update(eventId, entity);
   }
 
-  findNotNotifiedEvent(due_date: Date, notified: boolean): Promise<Event[]> {
+  findNotNotifiedEvents(due_date: Date, notified: boolean): Promise<Event[]> {
     return this.eventRepository.find({
-      where: { due_date, notified },
+      where: { due_date: LessThanOrEqual(due_date), notified },
       relations: ['user'],
     });
   }
