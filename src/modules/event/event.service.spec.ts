@@ -80,4 +80,49 @@ describe('EventsService', () => {
       });
     });
   });
+  describe('findEvents', () => {
+    it('should return the events response with correct data and meta', async () => {
+      const page = 1;
+      const pageSize = 10;
+      const userId = 123;
+      const eventData = [
+        {
+          id: 1,
+          title: 'Event 1',
+          description: 'Description 1',
+          due_date: new Date(),
+          user: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          id: 2,
+          title: 'Event 2',
+          description: 'Description 2',
+          due_date: new Date(),
+          user: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+      ];
+      const total = 2;
+      jest
+        .spyOn(eventRepository, 'pagination')
+        .mockResolvedValue([eventData, total]);
+      const response = await eventService.findEvents(page, pageSize, userId);
+      expect(eventRepository.pagination).toHaveBeenCalledWith(
+        userId,
+        page,
+        pageSize,
+      );
+      expect(response).toEqual({
+        data: eventData,
+        meta: {
+          total: total,
+          page: page,
+          pageSize: eventData.length,
+        },
+      });
+    });
+  });
 });
