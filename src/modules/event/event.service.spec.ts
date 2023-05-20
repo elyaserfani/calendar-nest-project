@@ -244,4 +244,47 @@ describe('EventsService', () => {
       ).rejects.toThrowError(NotFoundException);
     });
   });
+
+  describe('deleteEvent', () => {
+    it('should delete the event and return a success response when it exists', async () => {
+      const eventId = 1;
+      const userId = 123;
+      const event = {
+        id: eventId,
+        title: 'Event 1',
+        description: 'Description 1',
+        due_date: new Date(),
+        user: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+      jest
+        .spyOn(eventRepository, 'checkEventOwnership')
+        .mockResolvedValue(event);
+      jest.spyOn(eventRepository, 'deleteEvent').mockResolvedValue(undefined);
+
+      const response = await eventService.deleteEvent(eventId, userId);
+      expect(eventRepository.checkEventOwnership).toHaveBeenCalledWith(
+        eventId,
+        userId,
+      );
+      expect(eventRepository.deleteEvent).toHaveBeenCalledWith(eventId);
+      expect(response).toEqual({
+        data: {
+          result: { success: true },
+        },
+      });
+    });
+
+    it('should throw NotFoundException when event does not exist', async () => {
+      const eventId = 1;
+      const userId = 123;
+      jest
+        .spyOn(eventRepository, 'checkEventOwnership')
+        .mockResolvedValue(null);
+      await expect(
+        eventService.deleteEvent(eventId, userId),
+      ).rejects.toThrowError(NotFoundException);
+    });
+  });
 });
