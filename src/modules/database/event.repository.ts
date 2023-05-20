@@ -6,47 +6,38 @@ import { Event } from 'src/entities';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 @Injectable()
-export class EventRepository
-  extends Repository<Event>
-  implements IEventRepository
-{
+export class EventRepository implements IEventRepository {
   constructor(
     @InjectRepository(Event)
     private readonly eventRepository: Repository<Event>,
-  ) {
-    super(
-      eventRepository.target,
-      eventRepository.manager,
-      eventRepository.queryRunner,
-    );
-  }
+  ) {}
   createEvent(eventData: Partial<Event>, userId: number): Promise<Event> {
-    const event = this.create({
+    const event = this.eventRepository.create({
       title: eventData.title,
       description: eventData.description,
       due_date: eventData.due_date,
       user: { id: userId },
     });
-    return this.save(event);
+    return this.eventRepository.save(event);
   }
   findById(id: number): Promise<Event> {
-    return this.findOneBy({ id });
+    return this.eventRepository.findOneBy({ id });
   }
   checkEventOwnership(eventId: number, userId: number): Promise<Event> {
-    return this.findOneBy({
+    return this.eventRepository.findOneBy({
       id: eventId,
       user: { id: userId },
     });
   }
   deleteEvent(id: number): Promise<DeleteResult> {
-    return this.delete(id);
+    return this.eventRepository.delete(id);
   }
   pagination(
     userId: number,
     page: number,
     pageSize: number,
   ): Promise<[Event[], number]> {
-    return this.findAndCount({
+    return this.eventRepository.findAndCount({
       where: { user: { id: userId } },
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -56,6 +47,13 @@ export class EventRepository
     eventId: number,
     entity: QueryDeepPartialEntity<Event>,
   ): Promise<UpdateResult> {
-    return this.update(eventId, entity);
+    return this.eventRepository.update(eventId, entity);
+  }
+
+  findNotNotifiedEvent(due_date: Date, notified: boolean): Promise<Event[]> {
+    return this.eventRepository.find({
+      where: { due_date, notified },
+      relations: ['user'],
+    });
   }
 }

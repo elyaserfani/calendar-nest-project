@@ -57,6 +57,7 @@ describe('EventsService', () => {
         user: null,
         created_at: new Date(),
         updated_at: new Date(),
+        notified: false,
       };
       jest.spyOn(eventRepository, 'createEvent').mockResolvedValue(savedEvent);
       const response = await eventService.createEvent(
@@ -93,6 +94,7 @@ describe('EventsService', () => {
           user: null,
           created_at: new Date(),
           updated_at: new Date(),
+          notified: false,
         },
         {
           id: 2,
@@ -102,6 +104,7 @@ describe('EventsService', () => {
           user: null,
           created_at: new Date(),
           updated_at: new Date(),
+          notified: false,
         },
       ];
       const total = 2;
@@ -137,6 +140,7 @@ describe('EventsService', () => {
         user: null,
         created_at: new Date(),
         updated_at: new Date(),
+        notified: false,
       };
       jest
         .spyOn(eventRepository, 'checkEventOwnership')
@@ -180,6 +184,7 @@ describe('EventsService', () => {
         user: null,
         created_at: new Date(),
         updated_at: new Date(),
+        notified: false,
       };
       const updatedEvent = {
         ...event,
@@ -251,6 +256,7 @@ describe('EventsService', () => {
         user: null,
         created_at: new Date(),
         updated_at: new Date(),
+        notified: false,
       };
       jest
         .spyOn(eventRepository, 'checkEventOwnership')

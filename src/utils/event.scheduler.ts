@@ -16,13 +16,10 @@ export class EventScheduler {
   @Cron('*/5 * * * * *') //Run every 5 second
   async sendEventReminders() {
     const currentDate = new Date();
-    const events = await this.eventRepository.find({
-      where: {
-        due_date: LessThanOrEqual(currentDate),
-        notified: false,
-      },
-      relations: ['user'],
-    });
+    const events = await this.eventRepository.findNotNotifiedEvent(
+      currentDate,
+      false,
+    );
     for (const event of events) {
       const mailOptions = {
         to: event.user.email,
@@ -31,7 +28,7 @@ export class EventScheduler {
       };
       const mailSent = await this.mailerService.sendMail(mailOptions);
       if (mailSent) {
-        await this.eventRepository.update(event.id, { notified: true });
+        await this.eventRepository.updateEvent(event.id, { notified: true });
         console.log(
           `An email has been sent to ${event.user.email} for ${event.title}`,
         );

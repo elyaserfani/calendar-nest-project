@@ -5,21 +5,12 @@ import { Role } from 'src/entities';
 import { IRoleRepository } from '../../interfaces';
 
 @Injectable()
-export class RoleRepository
-  extends Repository<Role>
-  implements IRoleRepository
-{
+export class RoleRepository implements IRoleRepository {
   constructor(
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
-  ) {
-    super(
-      roleRepository.target,
-      roleRepository.manager,
-      roleRepository.queryRunner,
-    );
-  }
+  ) {}
   findByName(name: string): Promise<Role> {
-    return this.findOneBy({ name });
+    return this.roleRepository.findOneBy({ name });
   }
 }
