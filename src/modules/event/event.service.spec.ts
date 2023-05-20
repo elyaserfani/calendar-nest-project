@@ -5,12 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
 import { Event } from 'src/entities';
 import { JwtHelper, DateHelper } from 'src/utils';
-import {
-  CreateEventRequestDto,
-  CreateEventResponseDto,
-  UpdateEventRequestDto,
-} from 'src/dtos/events';
-import { UtilityModule } from '../utility';
+import { CreateEventRequestDto, UpdateEventRequestDto } from 'src/dtos/events';
 import { EventRepository } from './event.repository';
 import { EventService } from './event.service';
 import { NotFoundException } from 'src/exceptions';
@@ -23,7 +18,6 @@ describe('EventsService', () => {
   beforeEach(async () => {
     dotenv.config();
     const module: TestingModule = await Test.createTestingModule({
-      imports: [UtilityModule],
       providers: [
         EventService,
         EventRepository,
