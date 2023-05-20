@@ -55,7 +55,7 @@ describe('UserService', () => {
   });
 
   describe('registerUser', () => {
-    it('should register a new user', async () => {
+    it('Should accept RegisterRequestDto and register a new user and return RegisterResponseDto response', async () => {
       const registerRequestDto: RegisterRequestDto = {
         username: 'testuser',
         email: 'testuser@test.com',
@@ -112,7 +112,7 @@ describe('UserService', () => {
       expect(result).toEqual(expected);
     });
 
-    it('should throw a BadRequestException if user already exists', async () => {
+    it('Should throw a BadRequestException if user already exists', async () => {
       const registerRequestDto: RegisterRequestDto = {
         username: 'testuser',
         email: 'testuser@test.com',
@@ -138,7 +138,7 @@ describe('UserService', () => {
       ).rejects.toThrow(BadRequestException);
     });
 
-    it('should throw a NotFoundException if role does not exists', async () => {
+    it('Should throw a NotFoundException if role does not exists', async () => {
       const registerRequestDto: RegisterRequestDto = {
         username: 'testuser',
         email: 'testuser@test.com',
@@ -157,7 +157,7 @@ describe('UserService', () => {
   });
 
   describe('loginUser', () => {
-    it('should login user with valid credentials', async () => {
+    it('should accept LoginRequestDto and login user with valid credentials', async () => {
       const user = new User();
       user.id = 1;
       user.username = 'testuser';
