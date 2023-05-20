@@ -5,7 +5,11 @@ import { JwtService } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
 import { Event } from 'src/entities';
 import { JwtHelper, DateHelper } from 'src/utils';
-import { CreateEventRequestDto, CreateEventResponseDto } from 'src/dtos/events';
+import {
+  CreateEventRequestDto,
+  CreateEventResponseDto,
+  UpdateEventRequestDto,
+} from 'src/dtos/events';
 import { UtilityModule } from '../utility';
 import { EventRepository } from './event.repository';
 import { EventService } from './event.service';
@@ -163,6 +167,81 @@ describe('EventsService', () => {
       await expect(eventService.getEvent(eventId, userId)).rejects.toThrowError(
         NotFoundException,
       );
+    });
+  });
+  describe('updateEvent', () => {
+    it('should update the event and return the updated event response when it exists', async () => {
+      const eventId = 1;
+      const userId = 123;
+      const updateEventRequestDto: UpdateEventRequestDto = {
+        title: 'Updated Event',
+        description: 'Updated Description',
+        due_date: new Date(),
+      };
+      const event = {
+        id: eventId,
+        title: 'Event 1',
+        description: 'Description 1',
+        due_date: new Date(),
+        user: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+      const updatedEvent = {
+        ...event,
+        ...updateEventRequestDto,
+        updated_at: new Date(),
+      };
+      jest
+        .spyOn(eventRepository, 'checkEventOwnership')
+        .mockResolvedValue(event);
+      jest.spyOn(eventRepository, 'updateEvent').mockResolvedValue(undefined);
+      jest.spyOn(eventRepository, 'findById').mockResolvedValue(updatedEvent);
+
+      const response = await eventService.updateEvent(
+        eventId,
+        updateEventRequestDto,
+        userId,
+      );
+      expect(eventRepository.checkEventOwnership).toHaveBeenCalledWith(
+        eventId,
+        userId,
+      );
+      expect(eventRepository.updateEvent).toHaveBeenCalledWith(eventId, {
+        title: updateEventRequestDto.title,
+        description: updateEventRequestDto.description,
+        due_date: updateEventRequestDto.due_date,
+        updated_at: expect.any(Date),
+      });
+      expect(eventRepository.findById).toHaveBeenCalledWith(eventId);
+      expect(response).toEqual({
+        data: {
+          event: {
+            id: updatedEvent.id,
+            title: updatedEvent.title,
+            description: updatedEvent.description,
+            due_date: updatedEvent.due_date,
+            created_at: updatedEvent.created_at,
+            updated_at: updatedEvent.updated_at,
+          },
+        },
+      });
+    });
+
+    it('should throw NotFoundException when event does not exist', async () => {
+      const eventId = 1;
+      const userId = 123;
+      const updateEventRequestDto: UpdateEventRequestDto = {
+        title: 'Updated Event',
+        description: 'Updated Description',
+        due_date: new Date(),
+      };
+      jest
+        .spyOn(eventRepository, 'checkEventOwnership')
+        .mockResolvedValue(null);
+      await expect(
+        eventService.updateEvent(eventId, updateEventRequestDto, userId),
+      ).rejects.toThrowError(NotFoundException);
     });
   });
 });
