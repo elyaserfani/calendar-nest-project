@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Notification } from './notification.interface';
 import { NotificationType } from 'src/commons';
 import {
@@ -9,8 +9,12 @@ import {
 
 @Injectable()
 export class NotificationFactory {
-  static createNotification(type: NotificationType): Notification {
-    switch (type) {
+  constructor(
+    @Inject('NOTIFICATION_TYPE')
+    private readonly notificationType: NotificationType,
+  ) {}
+  createNotification(): Notification {
+    switch (this.notificationType) {
       case NotificationType.SMS:
         return new SmsNotificationService();
       case NotificationType.CONSOLE:

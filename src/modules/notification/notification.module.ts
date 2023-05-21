@@ -27,10 +27,11 @@ export class NotificationModule {
         NotificationFactory,
         {
           provide: 'NOTIFICATION_TYPE',
-          useValue: notificationType,
+          useFactory: () =>
+            new NotificationFactory(notificationType).createNotification(),
         },
       ],
-      exports: [NotificationFactory],
+      exports: [NotificationFactory, 'NOTIFICATION_TYPE'],
     };
   }
 }

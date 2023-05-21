@@ -38,7 +38,6 @@ import { NotificationType } from 'src/commons';
       signOptions: { expiresIn: '1d' },
     }),
     UtilityModule,
-    NotificationModule.forFeature(NotificationType.CONSOLE),
   ],
   exports: [JwtModule],
   providers: [JwtStrategy, NotificationModule],

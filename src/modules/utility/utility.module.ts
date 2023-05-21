@@ -11,7 +11,8 @@ import {
   EventScheduler,
 } from 'src/utils';
 import { DatabaseModule } from '../database';
-import { NotificationFactory } from '../notification';
+import { NotificationModule } from '../notification';
+import { NotificationType } from 'src/commons';
 
 @Module({
   imports: [
@@ -19,6 +20,8 @@ import { NotificationFactory } from '../notification';
     ConfigModule,
     ScheduleModule.forRoot(),
     DatabaseModule,
+    NotificationModule,
+    NotificationModule.forFeature(NotificationType.CONSOLE),
     MailerModule.forRoot({
       transport: {
         service: 'Gmail',
