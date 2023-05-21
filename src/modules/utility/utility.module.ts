@@ -9,9 +9,9 @@ import {
   JwtStrategy,
   CustomConfigService,
   EventScheduler,
-  NotificationServiceFactory,
 } from 'src/utils';
 import { DatabaseModule } from '../database';
+import { NotificationFactory } from '../notification';
 
 @Module({
   imports: [
@@ -38,8 +38,15 @@ import { DatabaseModule } from '../database';
     DateHelper,
     CustomConfigService,
     EventScheduler,
-    NotificationServiceFactory,
+    NotificationFactory,
   ],
-  exports: [JwtHelper, JwtStrategy, DateHelper, CustomConfigService],
+  exports: [
+    JwtHelper,
+    JwtStrategy,
+    DateHelper,
+    CustomConfigService,
+    EventScheduler,
+    NotificationFactory,
+  ],
 })
 export class UtilityModule {}

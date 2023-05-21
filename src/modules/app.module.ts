@@ -40,7 +40,7 @@ import { NotificationModule } from './notification/notification.module';
     NotificationModule,
   ],
   exports: [JwtModule],
-  providers: [JwtStrategy],
+  providers: [JwtStrategy, NotificationModule],
   controllers: [UserController, RoleController, EventController],
 })
 export class AppModule {}

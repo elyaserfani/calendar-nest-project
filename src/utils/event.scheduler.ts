@@ -1,15 +1,15 @@
-import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { EventRepository } from 'src/modules/database';
-import { NotificationServiceFactory } from './notification.service.factory';
+import { use } from 'passport';
 import { NotificationType } from 'src/commons';
+import { EventRepository } from 'src/modules/database';
+import { Notification, NotificationFactory } from 'src/modules/notification';
 
 @Injectable()
 export class EventScheduler {
   constructor(
     private readonly eventRepository: EventRepository,
-    private readonly notificationServiceFactory: NotificationServiceFactory,
+    private readonly notificationFactory: NotificationFactory,
   ) {}
 
   @Cron('*/5 * * * * *') //Run every 5 second
@@ -20,23 +20,15 @@ export class EventScheduler {
       false,
     );
     for (const event of events) {
-      const notificationService =
-        this.notificationServiceFactory.createNotificationService(
-          NotificationType.CONSOLE,
-        );
-      notificationService.sendNotification(event.title);
-      // const mailOptions = {
-      //   to: event.user.email,
-      //   subject: 'Event Reminder',
-      //   text: `Your event "${event.title}" is due on ${event.due_date}.`,
-      // };
-      // const mailSent = await this.mailerService.sendMail(mailOptions);
-      // if (mailSent) {
-      //   await this.eventRepository.updateEvent(event.id, { notified: true });
-      //   console.log(
-      //     `An email has been sent to ${event.user.email} for ${event.title}`,
-      //   );
-      // }
+      const notification: Notification =
+        this.notificationFactory.createNotification(NotificationType.CONSOLE);
+      notification.sendNotification({
+        subject: 'Event reminder',
+        email: event.user.email,
+        phoneNumber: '09153887158',
+        message: `Your event "${event.title}" is due on ${event.due_date}.`,
+      });
+      await this.eventRepository.updateEvent(event.id, { notified: true });
     }
   }
 }

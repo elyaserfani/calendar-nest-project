@@ -1,18 +1,20 @@
 import { Module } from '@nestjs/common';
-import { ConsoleNotificationService } from './console.notification.service';
-import { SmsNotificationService } from './sms.notification.service';
-import { EmailNotificationService } from './email.notification.service';
+import {
+  EmailNotificationService,
+  ConsoleNotificationService,
+  SmsNotificationService,
+} from './notification.service';
 
 @Module({
   providers: [
-    ConsoleNotificationService,
-    EmailNotificationService,
     SmsNotificationService,
+    EmailNotificationService,
+    ConsoleNotificationService,
   ],
   exports: [
-    ConsoleNotificationService,
-    EmailNotificationService,
     SmsNotificationService,
+    EmailNotificationService,
+    ConsoleNotificationService,
   ],
 })
 export class NotificationModule {}
