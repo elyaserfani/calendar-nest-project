@@ -38,7 +38,6 @@ import { NotificationFactory } from '../notification';
     DateHelper,
     CustomConfigService,
     EventScheduler,
-    NotificationFactory,
   ],
   exports: [
     JwtHelper,
@@ -46,7 +45,6 @@ import { NotificationFactory } from '../notification';
     DateHelper,
     CustomConfigService,
     EventScheduler,
-    NotificationFactory,
   ],
 })
 export class UtilityModule {}

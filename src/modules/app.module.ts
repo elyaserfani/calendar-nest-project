@@ -14,6 +14,7 @@ import {
 } from 'src/controllers';
 import { UtilityModule } from './utility';
 import { NotificationModule } from './notification/notification.module';
+import { NotificationType } from 'src/commons';
 
 @Module({
   imports: [
@@ -37,7 +38,7 @@ import { NotificationModule } from './notification/notification.module';
       signOptions: { expiresIn: '1d' },
     }),
     UtilityModule,
-    NotificationModule,
+    NotificationModule.forFeature(NotificationType.CONSOLE),
   ],
   exports: [JwtModule],
   providers: [JwtStrategy, NotificationModule],

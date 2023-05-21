@@ -9,7 +9,7 @@ import {
 
 @Injectable()
 export class NotificationFactory {
-  createNotification(type: NotificationType): Notification {
+  static createNotification(type: NotificationType): Notification {
     switch (type) {
       case NotificationType.SMS:
         return new SmsNotificationService();

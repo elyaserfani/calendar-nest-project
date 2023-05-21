@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { use } from 'passport';
 import { NotificationType } from 'src/commons';
 import { EventRepository } from 'src/modules/database';
 import { Notification, NotificationFactory } from 'src/modules/notification';
 
 @Injectable()
 export class EventScheduler {
-  constructor(
-    private readonly eventRepository: EventRepository,
-    private readonly notificationFactory: NotificationFactory,
-  ) {}
+  constructor(private readonly eventRepository: EventRepository) {}
 
   @Cron('*/5 * * * * *') //Run every 5 second
   async sendEventReminders() {
@@ -20,8 +16,9 @@ export class EventScheduler {
       false,
     );
     for (const event of events) {
-      const notification: Notification =
-        this.notificationFactory.createNotification(NotificationType.CONSOLE);
+      const notification: Notification = NotificationFactory.createNotification(
+        NotificationType.CONSOLE,
+      );
       notification.sendNotification({
         subject: 'Event reminder',
         email: event.user.email,
