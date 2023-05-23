@@ -1,12 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { EventRepository } from 'src/modules/database';
+import { IEventRepository } from 'src/interfaces/repositories';
 import { Notification } from 'src/modules/notification';
 
 @Injectable()
 export class EventScheduler {
   constructor(
-    private readonly eventRepository: EventRepository,
+    @Inject('IEventRepository')
+    private readonly eventRepository: IEventRepository,
     @Inject('NOTIFICATION_TYPE')
     private readonly notification: Notification,
   ) {}

@@ -19,4 +19,5 @@ export interface IEventRepository {
     eventId: number,
     entity: QueryDeepPartialEntity<Event>,
   ): Promise<UpdateResult>;
+  findNotNotifiedEvents(due_date: Date, notified: boolean): Promise<Event[]>;
 }

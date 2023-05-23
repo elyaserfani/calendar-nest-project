@@ -16,6 +16,12 @@ export class EventRepository implements IEventRepository {
     @InjectRepository(Event)
     private readonly eventRepository: Repository<Event>,
   ) {}
+  findNotNotifiedEvents(due_date: Date, notified: boolean): Promise<Event[]> {
+    return this.eventRepository.find({
+      where: { due_date: LessThanOrEqual(due_date), notified },
+      relations: ['user'],
+    });
+  }
   createEvent(eventData: Partial<Event>, userId: number): Promise<Event> {
     const event = this.eventRepository.create({
       title: eventData.title,
@@ -53,12 +59,5 @@ export class EventRepository implements IEventRepository {
     entity: QueryDeepPartialEntity<Event>,
   ): Promise<UpdateResult> {
     return this.eventRepository.update(eventId, entity);
-  }
-
-  findNotNotifiedEvents(due_date: Date, notified: boolean): Promise<Event[]> {
-    return this.eventRepository.find({
-      where: { due_date: LessThanOrEqual(due_date), notified },
-      relations: ['user'],
-    });
   }
 }

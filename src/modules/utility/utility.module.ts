@@ -9,7 +9,7 @@ import {
   JwtStrategy,
   CustomConfigService,
 } from 'src/utils';
-import { DatabaseModule } from '../database';
+import { DatabaseModule, EventRepository } from '../database';
 import { EventScheduler, NotificationModule } from '../notification';
 import { NotificationType } from 'src/commons';
 
@@ -40,6 +40,10 @@ import { NotificationType } from 'src/commons';
     DateHelper,
     CustomConfigService,
     EventScheduler,
+    {
+      provide: 'IEventRepository',
+      useClass: EventRepository,
+    },
   ],
   exports: [
     JwtHelper,
@@ -47,6 +51,7 @@ import { NotificationType } from 'src/commons';
     DateHelper,
     CustomConfigService,
     EventScheduler,
+    'IEventRepository',
   ],
 })
 export class UtilityModule {}
