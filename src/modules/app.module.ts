@@ -14,7 +14,6 @@ import {
 } from 'src/controllers';
 import { UtilityModule } from './utility';
 import { NotificationModule } from './notification/notification.module';
-import { NotificationType } from 'src/commons';
 
 @Module({
   imports: [
@@ -38,9 +37,10 @@ import { NotificationType } from 'src/commons';
       signOptions: { expiresIn: '1d' },
     }),
     UtilityModule,
+    NotificationModule,
   ],
   exports: [JwtModule],
-  providers: [JwtStrategy, NotificationModule],
+  providers: [JwtStrategy],
   controllers: [UserController, RoleController, EventController],
 })
 export class AppModule {}
