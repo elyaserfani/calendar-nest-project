@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EventRepository } from '../event/event.repository';
-import { RoleRepository } from '../role/role.repository';
-import { UserRepository } from '../user/user.repository';
 import { User, Role, Event } from 'src/entities';
+import { EventRepository } from './event.repository';
+import { RoleRepository } from './role.repository';
+import { UserRepository } from './user.repository';
 
 @Module({
   imports: [

@@ -1,12 +1,53 @@
+import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { CustomConfigService } from 'src/services';
-import { JwtHelper, DateHelper, JwtStrategy } from 'src/utils';
+import { ScheduleModule } from '@nestjs/schedule';
+import {
+  JwtHelper,
+  DateHelper,
+  JwtStrategy,
+  CustomConfigService,
+} from 'src/utils';
+import { DatabaseModule, EventRepository } from '../database';
+import { EventModule } from '../event';
 
 @Module({
-  imports: [JwtModule, ConfigModule],
-  providers: [JwtHelper, JwtStrategy, DateHelper, CustomConfigService],
-  exports: [JwtHelper, JwtStrategy, DateHelper, CustomConfigService],
+  imports: [
+    JwtModule,
+    ConfigModule,
+    ScheduleModule.forRoot(),
+    DatabaseModule,
+    EventModule,
+    MailerModule.forRoot({
+      transport: {
+        service: 'Gmail',
+        auth: {
+          user: 'eventschedulertest@gmail.com',
+          pass: 'euyxwqhlmecqhaag',
+        },
+      },
+      defaults: {
+        from: '"Nest Calendar Project" <eventschedulertest@gmail.com>',
+      },
+    }),
+  ],
+  providers: [
+    JwtHelper,
+    JwtStrategy,
+    DateHelper,
+    CustomConfigService,
+    {
+      provide: 'EVENT_REPOSITORY',
+      useClass: EventRepository,
+    },
+  ],
+  exports: [
+    JwtHelper,
+    JwtStrategy,
+    DateHelper,
+    CustomConfigService,
+    'EVENT_REPOSITORY',
+  ],
 })
 export class UtilityModule {}

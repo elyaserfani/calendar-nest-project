@@ -11,21 +11,26 @@ import {
   LoginRequestDto,
 } from 'src/dtos/users';
 import { User, Role } from 'src/entities';
-import { JwtHelper, DateHelper } from 'src/helpers';
 import { BadRequestException, NotFoundException } from 'src/exceptions';
+import { JwtHelper, DateHelper } from 'src/utils';
+import { RoleRepository, UserRepository } from '../database';
+import { UtilityModule } from '../utility';
+import { IRoleRepository, IUserRepository } from 'src/interfaces/repositories';
 
 describe('UserService', () => {
   let userService: UserService;
-  let userRepository: Repository<User>;
-  let roleRepository: Repository<Role>;
+  let userRepository: IUserRepository;
+  let roleRepository: IRoleRepository;
   let jwtHelper: JwtHelper;
-  let dateHelper: DateHelper;
 
   beforeEach(async () => {
     dotenv.config();
     const module: TestingModule = await Test.createTestingModule({
+      imports: [UtilityModule],
       providers: [
         UserService,
+        UserRepository,
+        RoleRepository,
         JwtService,
         JwtHelper,
         DateHelper,
@@ -37,14 +42,37 @@ describe('UserService', () => {
           provide: getRepositoryToken(Role),
           useClass: Repository,
         },
+        {
+          provide: 'USER_REPOSITORY',
+          useClass: UserRepository,
+          useValue: {
+            findOneBy: jest.fn(),
+            create: jest.fn(),
+            find: jest.fn(),
+            delete: jest.fn(),
+            findAndCount: jest.fn(),
+            update: jest.fn(),
+          },
+        },
+        {
+          provide: 'ROLE_REPOSITORY',
+          useClass: RoleRepository,
+          useValue: {
+            findOneBy: jest.fn(),
+            create: jest.fn(),
+            find: jest.fn(),
+            delete: jest.fn(),
+            findAndCount: jest.fn(),
+            update: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     userService = module.get<UserService>(UserService);
-    userRepository = module.get<Repository<User>>(getRepositoryToken(User));
-    roleRepository = module.get<Repository<Role>>(getRepositoryToken(Role));
+    userRepository = module.get<IUserRepository>('USER_REPOSITORY');
+    roleRepository = module.get<IRoleRepository>('ROLE_REPOSITORY');
     jwtHelper = module.get<JwtHelper>(JwtHelper);
-    dateHelper = module.get<DateHelper>(DateHelper);
   });
 
   afterEach(() => {
@@ -61,26 +89,17 @@ describe('UserService', () => {
         role: 'ROLE_USER',
       };
 
-      jest.spyOn(userRepository, 'findOneBy').mockResolvedValueOnce(undefined);
-      jest.spyOn(roleRepository, 'findOneBy').mockResolvedValueOnce({
+      jest
+        .spyOn(userRepository, 'findByUsername')
+        .mockResolvedValueOnce(undefined);
+      jest.spyOn(roleRepository, 'findByName').mockResolvedValueOnce({
         id: 1,
         name: 'ROLE_USER',
         created_at: new Date(),
         updated_at: new Date(),
         users: null,
       });
-      jest.spyOn(userRepository, 'create').mockReturnValueOnce({
-        id: 1,
-        username: 'testuser',
-        email: 'testuser@test.com',
-        password: 'hashedpassword',
-        nickname: 'Test User',
-        role: 'ROLE_USER',
-        created_at: new Date(),
-        updated_at: new Date(),
-        events: null,
-      });
-      jest.spyOn(userRepository, 'save').mockResolvedValueOnce({
+      jest.spyOn(userRepository, 'createUser').mockResolvedValueOnce({
         id: 1,
         username: 'testuser',
         email: 'testuser@test.com',
@@ -100,7 +119,7 @@ describe('UserService', () => {
             email: 'testuser@test.com',
             nickname: 'Test User',
             role: 'ROLE_USER',
-            accessToken: 'testtoken',
+            accessToken: expect.any(String),
           },
         },
       };
@@ -118,7 +137,7 @@ describe('UserService', () => {
         role: 'ROLE_USER',
       };
 
-      jest.spyOn(userRepository, 'findOneBy').mockResolvedValueOnce({
+      jest.spyOn(userRepository, 'findByUsername').mockResolvedValueOnce({
         id: 1,
         username: 'testuser',
         email: 'testuser@test.com',
@@ -144,8 +163,10 @@ describe('UserService', () => {
         role: 'INVALID_ROLE',
       };
 
-      jest.spyOn(userRepository, 'findOneBy').mockResolvedValueOnce(undefined);
-      jest.spyOn(roleRepository, 'findOneBy').mockResolvedValueOnce(undefined);
+      jest
+        .spyOn(userRepository, 'findByUsername')
+        .mockResolvedValueOnce(undefined);
+      jest.spyOn(roleRepository, 'findByName').mockResolvedValueOnce(undefined);
 
       await expect(
         userService.registerUser(registerRequestDto),
@@ -163,7 +184,7 @@ describe('UserService', () => {
       user.password = await bcrypt.hash('password', 10);
       user.role = 'ROLE_USER';
 
-      jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(user);
+      jest.spyOn(userRepository, 'findByUsername').mockResolvedValue(user);
 
       const loginRequestDto = new LoginRequestDto();
       loginRequestDto.username = 'testuser';
@@ -184,7 +205,7 @@ describe('UserService', () => {
       });
     });
     it('should throw a NotFoundException when provided with an invalid username', async () => {
-      jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(undefined);
+      jest.spyOn(userRepository, 'findByUsername').mockResolvedValue(undefined);
       const loginRequestDto = new LoginRequestDto();
       loginRequestDto.username = 'invaliduser';
       loginRequestDto.password = 'password';
@@ -201,7 +222,7 @@ describe('UserService', () => {
       user.nickname = 'Test User';
       user.password = await bcrypt.hash('password', 10);
       user.role = 'ROLE_USER';
-      jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(user);
+      jest.spyOn(userRepository, 'findByUsername').mockResolvedValue(user);
       const loginRequestDto = new LoginRequestDto();
       loginRequestDto.username = 'testuser';
       loginRequestDto.password = 'invalidpassword';

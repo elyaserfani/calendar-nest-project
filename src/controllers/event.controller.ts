@@ -27,9 +27,9 @@ import {
   UpdateEventResponseDto,
   UpdateEventRequestDto,
 } from 'src/dtos/events';
-import { EventService } from 'src/services';
 import { JwtAuthGuard } from 'src/guards';
 import { AuthPayload } from 'src/utils';
+import { EventService } from 'src/modules/event';
 
 @Controller('events')
 @UseGuards(JwtAuthGuard)

@@ -7,12 +7,14 @@ import { RoleModule } from './role/role.module';
 import { UserModule } from './user/user.module';
 import { JwtStrategy } from 'src/utils';
 import * as Joi from 'joi';
-import { UtilityModule } from './utility/utility.module';
 import {
   EventController,
   RoleController,
   UserController,
 } from 'src/controllers';
+import { UtilityModule } from './utility';
+import { NotificationModule } from './notification/notification.module';
+import { SchedulerModule } from './scheduler';
 
 @Module({
   imports: [
@@ -36,6 +38,8 @@ import {
       signOptions: { expiresIn: '1d' },
     }),
     UtilityModule,
+    NotificationModule,
+    SchedulerModule,
   ],
   exports: [JwtModule],
   providers: [JwtStrategy],
