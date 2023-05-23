@@ -13,14 +13,14 @@ import {
 import { User, Role } from 'src/entities';
 import { BadRequestException, NotFoundException } from 'src/exceptions';
 import { JwtHelper, DateHelper } from 'src/utils';
-import { UserRepository } from '../database/user.repository';
-import { RoleRepository } from '../role';
+import { RoleRepository, UserRepository } from '../database';
 import { UtilityModule } from '../utility';
+import { IRoleRepository, IUserRepository } from 'src/interfaces/repositories';
 
 describe('UserService', () => {
   let userService: UserService;
-  let userRepository: UserRepository;
-  let roleRepository: RoleRepository;
+  let userRepository: IUserRepository;
+  let roleRepository: IRoleRepository;
   let jwtHelper: JwtHelper;
 
   beforeEach(async () => {
@@ -28,9 +28,9 @@ describe('UserService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [UtilityModule],
       providers: [
+        UserService,
         UserRepository,
         RoleRepository,
-        UserService,
         JwtService,
         JwtHelper,
         DateHelper,
@@ -42,11 +42,36 @@ describe('UserService', () => {
           provide: getRepositoryToken(Role),
           useClass: Repository,
         },
+        {
+          provide: 'USER_REPOSITORY',
+          useClass: UserRepository,
+          useValue: {
+            findOneBy: jest.fn(),
+            create: jest.fn(),
+            find: jest.fn(),
+            delete: jest.fn(),
+            findAndCount: jest.fn(),
+            update: jest.fn(),
+          },
+        },
+        {
+          provide: 'ROLE_REPOSITORY',
+          useClass: RoleRepository,
+          useValue: {
+            findOneBy: jest.fn(),
+            create: jest.fn(),
+            find: jest.fn(),
+            delete: jest.fn(),
+            findAndCount: jest.fn(),
+            update: jest.fn(),
+          },
+        },
       ],
     }).compile();
-    userRepository = module.get<UserRepository>(UserRepository);
-    roleRepository = module.get<RoleRepository>(RoleRepository);
+
     userService = module.get<UserService>(UserService);
+    userRepository = module.get<IUserRepository>('USER_REPOSITORY');
+    roleRepository = module.get<IRoleRepository>('ROLE_REPOSITORY');
     jwtHelper = module.get<JwtHelper>(JwtHelper);
   });
 
@@ -55,7 +80,7 @@ describe('UserService', () => {
   });
 
   describe('registerUser', () => {
-    it('Should accept RegisterRequestDto and register a new user and return RegisterResponseDto response', async () => {
+    it('should register a new user', async () => {
       const registerRequestDto: RegisterRequestDto = {
         username: 'testuser',
         email: 'testuser@test.com',
@@ -64,26 +89,17 @@ describe('UserService', () => {
         role: 'ROLE_USER',
       };
 
-      jest.spyOn(userRepository, 'findOneBy').mockResolvedValueOnce(undefined);
-      jest.spyOn(roleRepository, 'findOneBy').mockResolvedValueOnce({
+      jest
+        .spyOn(userRepository, 'findByUsername')
+        .mockResolvedValueOnce(undefined);
+      jest.spyOn(roleRepository, 'findByName').mockResolvedValueOnce({
         id: 1,
         name: 'ROLE_USER',
         created_at: new Date(),
         updated_at: new Date(),
         users: null,
       });
-      jest.spyOn(userRepository, 'create').mockReturnValueOnce({
-        id: 1,
-        username: 'testuser',
-        email: 'testuser@test.com',
-        password: 'hashedpassword',
-        nickname: 'Test User',
-        role: 'ROLE_USER',
-        created_at: new Date(),
-        updated_at: new Date(),
-        events: null,
-      });
-      jest.spyOn(userRepository, 'save').mockResolvedValueOnce({
+      jest.spyOn(userRepository, 'createUser').mockResolvedValueOnce({
         id: 1,
         username: 'testuser',
         email: 'testuser@test.com',
@@ -112,7 +128,7 @@ describe('UserService', () => {
       expect(result).toEqual(expected);
     });
 
-    it('Should throw a BadRequestException if user already exists', async () => {
+    it('should throw a BadRequestException if user already exists', async () => {
       const registerRequestDto: RegisterRequestDto = {
         username: 'testuser',
         email: 'testuser@test.com',
@@ -121,7 +137,7 @@ describe('UserService', () => {
         role: 'ROLE_USER',
       };
 
-      jest.spyOn(userRepository, 'findOneBy').mockResolvedValueOnce({
+      jest.spyOn(userRepository, 'findByUsername').mockResolvedValueOnce({
         id: 1,
         username: 'testuser',
         email: 'testuser@test.com',
@@ -138,7 +154,7 @@ describe('UserService', () => {
       ).rejects.toThrow(BadRequestException);
     });
 
-    it('Should throw a NotFoundException if role does not exists', async () => {
+    it('should throw a NotFoundException if role does not exists', async () => {
       const registerRequestDto: RegisterRequestDto = {
         username: 'testuser',
         email: 'testuser@test.com',
@@ -147,8 +163,10 @@ describe('UserService', () => {
         role: 'INVALID_ROLE',
       };
 
-      jest.spyOn(userRepository, 'findOneBy').mockResolvedValueOnce(undefined);
-      jest.spyOn(roleRepository, 'findOneBy').mockResolvedValueOnce(undefined);
+      jest
+        .spyOn(userRepository, 'findByUsername')
+        .mockResolvedValueOnce(undefined);
+      jest.spyOn(roleRepository, 'findByName').mockResolvedValueOnce(undefined);
 
       await expect(
         userService.registerUser(registerRequestDto),
@@ -157,7 +175,7 @@ describe('UserService', () => {
   });
 
   describe('loginUser', () => {
-    it('should accept LoginRequestDto and login user with valid credentials', async () => {
+    it('should login user with valid credentials', async () => {
       const user = new User();
       user.id = 1;
       user.username = 'testuser';
@@ -166,7 +184,7 @@ describe('UserService', () => {
       user.password = await bcrypt.hash('password', 10);
       user.role = 'ROLE_USER';
 
-      jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(user);
+      jest.spyOn(userRepository, 'findByUsername').mockResolvedValue(user);
 
       const loginRequestDto = new LoginRequestDto();
       loginRequestDto.username = 'testuser';
@@ -187,7 +205,7 @@ describe('UserService', () => {
       });
     });
     it('should throw a NotFoundException when provided with an invalid username', async () => {
-      jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(undefined);
+      jest.spyOn(userRepository, 'findByUsername').mockResolvedValue(undefined);
       const loginRequestDto = new LoginRequestDto();
       loginRequestDto.username = 'invaliduser';
       loginRequestDto.password = 'password';
@@ -204,7 +222,7 @@ describe('UserService', () => {
       user.nickname = 'Test User';
       user.password = await bcrypt.hash('password', 10);
       user.role = 'ROLE_USER';
-      jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(user);
+      jest.spyOn(userRepository, 'findByUsername').mockResolvedValue(user);
       const loginRequestDto = new LoginRequestDto();
       loginRequestDto.username = 'testuser';
       loginRequestDto.password = 'invalidpassword';

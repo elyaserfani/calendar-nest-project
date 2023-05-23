@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { NotFoundException } from 'src/exceptions';
 import { SuccessResponseDto } from 'src/commons';
 import {
@@ -9,12 +9,31 @@ import {
   UpdateEventRequestDto,
   UpdateEventResponseDto,
 } from 'src/dtos/events';
-import { EventRepository } from '../database';
-
+import { IEventRepository } from 'src/interfaces/repositories';
+import { Notification } from '../notification';
 @Injectable()
 export class EventService {
-  constructor(private eventRepository: EventRepository) {}
-
+  constructor(
+    @Inject('EVENT_REPOSITORY') private eventRepository: IEventRepository,
+    @Inject('NOTIFICATION_TYPE')
+    private readonly notification: Notification,
+  ) {}
+  async checkEventsDueDates(): Promise<void> {
+    const currentDate = new Date();
+    const events = await this.eventRepository.findNotNotifiedEvents(
+      currentDate,
+      false,
+    );
+    for (const event of events) {
+      this.notification.sendNotification({
+        subject: 'Event reminder',
+        email: event.user.email,
+        phoneNumber: '09153887158',
+        message: `Your event "${event.title}" is due on ${event.due_date}.`,
+      });
+      await this.eventRepository.updateEvent(event.id, { notified: true });
+    }
+  }
   async createEvent(
     createEventRequestDto: CreateEventRequestDto,
     userId: number,

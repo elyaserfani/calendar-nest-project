@@ -18,6 +18,9 @@ export class Event {
   })
   due_date: Date;
 
+  @Column({ type: 'boolean', default: false })
+  notified: boolean;
+
   @ManyToOne(() => User, (user) => user.events)
   user: User;
 
