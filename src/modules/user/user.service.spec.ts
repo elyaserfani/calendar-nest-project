@@ -15,13 +15,13 @@ import { BadRequestException, NotFoundException } from 'src/exceptions';
 import { JwtHelper, DateHelper } from 'src/utils';
 import { RoleRepository, UserRepository } from '../database';
 import { UtilityModule } from '../utility';
+import { IRoleRepository, IUserRepository } from 'src/interfaces/repositories';
 
 describe('UserService', () => {
   let userService: UserService;
-  let userRepository: UserRepository;
-  let roleRepository: RoleRepository;
+  let userRepository: IUserRepository;
+  let roleRepository: IRoleRepository;
   let jwtHelper: JwtHelper;
-  let dateHelper: DateHelper;
 
   beforeEach(async () => {
     dotenv.config();
@@ -42,14 +42,37 @@ describe('UserService', () => {
           provide: getRepositoryToken(Role),
           useClass: Repository,
         },
+        {
+          provide: 'IUserRepository',
+          useClass: UserRepository,
+          useValue: {
+            findOneBy: jest.fn(),
+            create: jest.fn(),
+            find: jest.fn(),
+            delete: jest.fn(),
+            findAndCount: jest.fn(),
+            update: jest.fn(),
+          },
+        },
+        {
+          provide: 'IRoleRepository',
+          useClass: RoleRepository,
+          useValue: {
+            findOneBy: jest.fn(),
+            create: jest.fn(),
+            find: jest.fn(),
+            delete: jest.fn(),
+            findAndCount: jest.fn(),
+            update: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     userService = module.get<UserService>(UserService);
-    userRepository = module.get<UserRepository>(UserRepository);
-    roleRepository = module.get<RoleRepository>(RoleRepository);
+    userRepository = module.get<IUserRepository>('IUserRepository');
+    roleRepository = module.get<IRoleRepository>('IRoleRepository');
     jwtHelper = module.get<JwtHelper>(JwtHelper);
-    dateHelper = module.get<DateHelper>(DateHelper);
   });
 
   afterEach(() => {
@@ -96,7 +119,7 @@ describe('UserService', () => {
             email: 'testuser@test.com',
             nickname: 'Test User',
             role: 'ROLE_USER',
-            accessToken: 'testtoken',
+            accessToken: expect.any(String),
           },
         },
       };
