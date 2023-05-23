@@ -5,7 +5,11 @@ import { DatabaseModule } from '../database/database.module';
 
 @Module({
   imports: [DatabaseModule],
-  providers: [EventService, EventRepository],
+  providers: [
+    EventService,
+    EventRepository,
+    { provide: 'IEventRepository', useClass: EventRepository },
+  ],
   exports: [EventService, EventRepository],
 })
 export class EventModule {}

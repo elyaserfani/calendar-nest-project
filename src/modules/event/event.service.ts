@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { NotFoundException } from 'src/exceptions';
 import { SuccessResponseDto } from 'src/commons';
 import {
@@ -9,11 +9,13 @@ import {
   UpdateEventRequestDto,
   UpdateEventResponseDto,
 } from 'src/dtos/events';
-import { EventRepository } from '../database';
+import { IEventRepository } from 'src/interfaces/repositories';
 
 @Injectable()
 export class EventService {
-  constructor(private eventRepository: EventRepository) {}
+  constructor(
+    @Inject('IEventRepository') private eventRepository: IEventRepository,
+  ) {}
 
   async createEvent(
     createEventRequestDto: CreateEventRequestDto,

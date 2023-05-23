@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import {
   LoginRequestDto,
@@ -9,13 +9,15 @@ import {
 import { BadRequestException, NotFoundException } from 'src/exceptions';
 import { JwtHelper } from 'src/utils';
 import { CustomConfigService } from '../../utils/custom.config.service';
-import { RoleRepository, UserRepository } from '../database';
+import { IRoleRepository, IUserRepository } from 'src/interfaces/repositories';
 
 @Injectable()
 export class UserService {
   constructor(
-    private readonly userRepository: UserRepository,
-    private readonly roleRepository: RoleRepository,
+    @Inject('IUserRepository')
+    private readonly userRepository: IUserRepository,
+    @Inject('IRoleRepository')
+    private readonly roleRepository: IRoleRepository,
     private readonly jwtHelper: JwtHelper,
     private readonly customConfigService: CustomConfigService,
   ) {}

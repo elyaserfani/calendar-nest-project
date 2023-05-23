@@ -8,7 +8,13 @@ import { UtilityModule } from '../utility';
 
 @Module({
   imports: [DatabaseModule, JwtModule, UtilityModule],
-  providers: [UserService, UserRepository, RoleRepository],
+  providers: [
+    UserService,
+    UserRepository,
+    RoleRepository,
+    { provide: 'IUserRepository', useClass: UserRepository },
+    { provide: 'IRoleRepository', useClass: RoleRepository },
+  ],
   exports: [UserService, UserRepository, RoleRepository],
 })
 export class UserModule {}
