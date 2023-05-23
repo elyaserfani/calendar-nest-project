@@ -14,7 +14,7 @@ import { Notification } from '../notification';
 @Injectable()
 export class EventService {
   constructor(
-    @Inject('IEventRepository') private eventRepository: IEventRepository,
+    @Inject('EVENT_REPOSITORY') private eventRepository: IEventRepository,
     @Inject('NOTIFICATION_TYPE')
     private readonly notification: Notification,
   ) {}

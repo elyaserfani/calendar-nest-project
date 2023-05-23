@@ -13,8 +13,8 @@ import { NotificationType } from 'src/commons';
   providers: [
     EventService,
     EventRepository,
-    { provide: 'IEventRepository', useClass: EventRepository },
+    { provide: 'EVENT_REPOSITORY', useClass: EventRepository },
   ],
-  exports: [EventService, EventRepository, 'IEventRepository'],
+  exports: [EventService, EventRepository, 'EVENT_REPOSITORY'],
 })
 export class EventModule {}

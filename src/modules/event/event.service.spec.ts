@@ -31,7 +31,7 @@ describe('EventsService', () => {
           useClass: Repository,
         },
         {
-          provide: 'IEventRepository',
+          provide: 'EVENT_REPOSITORY',
           useClass: EventRepository,
           useValue: {
             findOneBy: jest.fn(),
@@ -50,7 +50,7 @@ describe('EventsService', () => {
       ],
     }).compile();
     eventService = module.get<EventService>(EventService);
-    eventRepository = module.get<IEventRepository>('IEventRepository');
+    eventRepository = module.get<IEventRepository>('EVENT_REPOSITORY');
   });
 
   afterEach(() => {

@@ -14,9 +14,9 @@ import { IRoleRepository, IUserRepository } from 'src/interfaces/repositories';
 @Injectable()
 export class UserService {
   constructor(
-    @Inject('IUserRepository')
+    @Inject('USER_REPOSITORY')
     private readonly userRepository: IUserRepository,
-    @Inject('IRoleRepository')
+    @Inject('ROLE_REPOSITORY')
     private readonly roleRepository: IRoleRepository,
     private readonly jwtHelper: JwtHelper,
     private readonly customConfigService: CustomConfigService,

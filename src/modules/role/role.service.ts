@@ -4,6 +4,6 @@ import { RoleRepository } from '../database';
 @Injectable()
 export class RoleService {
   constructor(
-    @Inject('IRoleRepository') private readonly roleRepository: RoleRepository,
+    @Inject('ROLE_REPOSITORY') private readonly roleRepository: RoleRepository,
   ) {}
 }

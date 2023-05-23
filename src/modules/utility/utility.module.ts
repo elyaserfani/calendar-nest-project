@@ -38,7 +38,7 @@ import { EventModule } from '../event';
     DateHelper,
     CustomConfigService,
     {
-      provide: 'IEventRepository',
+      provide: 'EVENT_REPOSITORY',
       useClass: EventRepository,
     },
   ],
@@ -47,7 +47,7 @@ import { EventModule } from '../event';
     JwtStrategy,
     DateHelper,
     CustomConfigService,
-    'IEventRepository',
+    'EVENT_REPOSITORY',
   ],
 })
 export class UtilityModule {}

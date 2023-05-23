@@ -8,8 +8,8 @@ import { RoleRepository } from '../database';
   providers: [
     RoleService,
     RoleRepository,
-    { provide: 'IRoleRepository', useClass: RoleRepository },
+    { provide: 'ROLE_REPOSITORY', useClass: RoleRepository },
   ],
-  exports: [RoleService],
+  exports: [RoleService, 'ROLE_REPOSITORY'],
 })
 export class RoleModule {}

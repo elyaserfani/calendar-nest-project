@@ -43,7 +43,7 @@ describe('UserService', () => {
           useClass: Repository,
         },
         {
-          provide: 'IUserRepository',
+          provide: 'USER_REPOSITORY',
           useClass: UserRepository,
           useValue: {
             findOneBy: jest.fn(),
@@ -55,7 +55,7 @@ describe('UserService', () => {
           },
         },
         {
-          provide: 'IRoleRepository',
+          provide: 'ROLE_REPOSITORY',
           useClass: RoleRepository,
           useValue: {
             findOneBy: jest.fn(),
@@ -70,8 +70,8 @@ describe('UserService', () => {
     }).compile();
 
     userService = module.get<UserService>(UserService);
-    userRepository = module.get<IUserRepository>('IUserRepository');
-    roleRepository = module.get<IRoleRepository>('IRoleRepository');
+    userRepository = module.get<IUserRepository>('USER_REPOSITORY');
+    roleRepository = module.get<IRoleRepository>('ROLE_REPOSITORY');
     jwtHelper = module.get<JwtHelper>(JwtHelper);
   });
 
