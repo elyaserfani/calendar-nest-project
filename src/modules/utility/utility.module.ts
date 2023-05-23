@@ -10,8 +10,6 @@ import {
   CustomConfigService,
 } from 'src/utils';
 import { DatabaseModule, EventRepository } from '../database';
-import { EventScheduler, NotificationModule } from '../notification';
-import { NotificationType } from 'src/commons';
 
 @Module({
   imports: [
@@ -19,8 +17,6 @@ import { NotificationType } from 'src/commons';
     ConfigModule,
     ScheduleModule.forRoot(),
     DatabaseModule,
-    NotificationModule,
-    NotificationModule.forFeature(NotificationType.CONSOLE),
     MailerModule.forRoot({
       transport: {
         service: 'Gmail',
@@ -39,7 +35,6 @@ import { NotificationType } from 'src/commons';
     JwtStrategy,
     DateHelper,
     CustomConfigService,
-    EventScheduler,
     {
       provide: 'IEventRepository',
       useClass: EventRepository,
@@ -50,7 +45,6 @@ import { NotificationType } from 'src/commons';
     JwtStrategy,
     DateHelper,
     CustomConfigService,
-    EventScheduler,
     'IEventRepository',
   ],
 })
