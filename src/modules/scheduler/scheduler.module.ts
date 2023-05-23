@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
-import { SchedulerAbstraction } from './scheduler.abstraction';
 import { SchedulerService } from './scheduler.service';
 import { EventModule } from '../event';
+import { Scheduler } from './scheduler';
 
 @Module({
   imports: [ScheduleModule.forRoot(), EventModule],
   providers: [
-    SchedulerAbstraction,
+    Scheduler,
     SchedulerService,
-    { provide: 'IScheduler', useClass: SchedulerAbstraction },
+    { provide: 'IScheduler', useClass: Scheduler },
   ],
-  exports: [SchedulerAbstraction, SchedulerService, 'IScheduler'],
+  exports: [Scheduler, SchedulerService, 'IScheduler'],
 })
 export class SchedulerModule {}
