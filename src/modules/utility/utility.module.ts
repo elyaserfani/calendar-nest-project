@@ -8,10 +8,9 @@ import {
   DateHelper,
   JwtStrategy,
   CustomConfigService,
-  EventScheduler,
 } from 'src/utils';
 import { DatabaseModule } from '../database';
-import { NotificationModule } from '../notification';
+import { EventScheduler, NotificationModule } from '../notification';
 import { NotificationType } from 'src/commons';
 
 @Module({
