@@ -14,6 +14,7 @@ import {
 } from 'src/controllers';
 import { UtilityModule } from './utility';
 import { NotificationModule } from './notification/notification.module';
+import { SchedulerModule } from './scheduler';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { NotificationModule } from './notification/notification.module';
     }),
     UtilityModule,
     NotificationModule,
+    SchedulerModule,
   ],
   exports: [JwtModule],
   providers: [JwtStrategy],

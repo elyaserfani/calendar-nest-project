@@ -10,6 +10,7 @@ import {
   CustomConfigService,
 } from 'src/utils';
 import { DatabaseModule, EventRepository } from '../database';
+import { EventModule } from '../event';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { DatabaseModule, EventRepository } from '../database';
     ConfigModule,
     ScheduleModule.forRoot(),
     DatabaseModule,
+    EventModule,
     MailerModule.forRoot({
       transport: {
         service: 'Gmail',

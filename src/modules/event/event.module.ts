@@ -15,6 +15,6 @@ import { NotificationType } from 'src/commons';
     EventRepository,
     { provide: 'IEventRepository', useClass: EventRepository },
   ],
-  exports: [EventService, EventRepository],
+  exports: [EventService, EventRepository, 'IEventRepository'],
 })
 export class EventModule {}

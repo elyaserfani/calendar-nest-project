@@ -1,1 +1,2 @@
-export * from './event.scheduler.interface';
+export * from './job.scheduler.interface';
+export * from './scheduler.interface';

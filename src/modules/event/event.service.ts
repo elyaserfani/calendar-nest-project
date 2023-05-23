@@ -10,20 +10,15 @@ import {
   UpdateEventResponseDto,
 } from 'src/dtos/events';
 import { IEventRepository } from 'src/interfaces/repositories';
-import { IEventScheduler } from 'src/interfaces';
-import { Cron } from '@nestjs/schedule';
 import { Notification } from '../notification';
-
 @Injectable()
-export class EventService implements IEventScheduler {
+export class EventService {
   constructor(
     @Inject('IEventRepository') private eventRepository: IEventRepository,
     @Inject('NOTIFICATION_TYPE')
     private readonly notification: Notification,
   ) {}
-
-  @Cron('*/5 * * * * *') //Run every 5 seconds
-  async sendEventReminders(): Promise<void> {
+  async checkEventsDueDates(): Promise<void> {
     const currentDate = new Date();
     const events = await this.eventRepository.findNotNotifiedEvents(
       currentDate,
@@ -39,7 +34,6 @@ export class EventService implements IEventScheduler {
       await this.eventRepository.updateEvent(event.id, { notified: true });
     }
   }
-
   async createEvent(
     createEventRequestDto: CreateEventRequestDto,
     userId: number,
