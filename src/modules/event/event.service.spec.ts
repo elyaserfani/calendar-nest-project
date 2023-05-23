@@ -9,12 +9,14 @@ import { CreateEventRequestDto, UpdateEventRequestDto } from 'src/dtos/events';
 import { EventRepository } from '../database/event.repository';
 import { EventService } from './event.service';
 import { NotFoundException } from 'src/exceptions';
+import { IEventRepository } from 'src/interfaces/repositories';
+import { NotificationFactory } from '../notification';
+import { NotificationType } from 'src/commons';
 
 describe('EventsService', () => {
   let eventService: EventService;
-  let eventRepository: EventRepository;
-  let jwtHelper: JwtHelper;
-  let dateHelper: DateHelper;
+  let eventRepository: IEventRepository;
+  const NOTIFICATION_TYPE = NotificationType.CONSOLE;
   beforeEach(async () => {
     dotenv.config();
     const module: TestingModule = await Test.createTestingModule({
@@ -28,13 +30,27 @@ describe('EventsService', () => {
           provide: getRepositoryToken(Event),
           useClass: Repository,
         },
+        {
+          provide: 'IEventRepository',
+          useClass: EventRepository,
+          useValue: {
+            findOneBy: jest.fn(),
+            create: jest.fn(),
+            find: jest.fn(),
+            delete: jest.fn(),
+            findAndCount: jest.fn(),
+            update: jest.fn(),
+          },
+        },
+        {
+          provide: 'NOTIFICATION_TYPE',
+          useFactory: () =>
+            new NotificationFactory(NOTIFICATION_TYPE).createNotification(),
+        },
       ],
     }).compile();
-
     eventService = module.get<EventService>(EventService);
-    eventRepository = module.get<EventRepository>(EventRepository);
-    jwtHelper = module.get<JwtHelper>(JwtHelper);
-    dateHelper = module.get<DateHelper>(DateHelper);
+    eventRepository = module.get<IEventRepository>('IEventRepository');
   });
 
   afterEach(() => {
