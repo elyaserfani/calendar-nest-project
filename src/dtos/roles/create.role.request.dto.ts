@@ -23,14 +23,24 @@ export class CreateRoleRequestDto {
   @Trim()
   name: string;
 
-  @ApiProperty({
-    example: 'Permissions',
-    description: 'Enter your permissions id',
-    maxLength: 90,
-  })
-  @IsArray()
-  @IsNotEmpty()
   @ArrayNotEmpty()
-  @Type(() => Permission)
+  @ApiProperty({
+    type: [Permission],
+    description: 'An array of permission associated with the role',
+    example: [
+      {
+        id: 6,
+        name: 'UPDATE',
+      },
+      {
+        id: 7,
+        name: 'READ',
+      },
+      {
+        id: 8,
+        name: 'WRITE',
+      },
+    ],
+  })
   permissions: Permission[];
 }

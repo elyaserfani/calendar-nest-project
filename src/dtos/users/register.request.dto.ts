@@ -61,12 +61,8 @@ export class RegisterRequestDto {
   @ApiProperty({
     example: 1,
     description: 'Enter your role id',
-    maxLength: 100,
   })
   @IsNumber()
   @IsNotEmpty()
-  @MaxLength(100)
-  @Sanitize()
-  @Trim()
   role: number;
 }

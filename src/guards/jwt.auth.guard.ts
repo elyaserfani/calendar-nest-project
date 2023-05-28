@@ -10,12 +10,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   handleRequest(err: any, user: any, context: any) {
     if (err || !user) {
       throw err || new UnauthorizedException(GlobalExceptionEnum.UNAUTHORIZED);
-    } else {
-      const requiredRole = context.getHandler().role;
-      if (!user || (requiredRole && !user.roles.includes(requiredRole))) {
-        throw new UnauthorizedException(GlobalExceptionEnum.PERMISSION_ERROR);
-      }
-      return user;
     }
+    return user;
   }
 }

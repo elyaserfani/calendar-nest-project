@@ -12,7 +12,11 @@ export class UserRepository implements IUserRepository {
   ) {}
 
   findByUsername(username: string): Promise<User> {
-    return this.userRepository.findOneBy({ username });
+    return this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.role', 'role')
+      .where('user.username = :username', { username })
+      .getOne();
   }
 
   async createUser(userData: Partial<User>): Promise<User> {
