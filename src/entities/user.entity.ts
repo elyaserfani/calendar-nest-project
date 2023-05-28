@@ -1,5 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
 import { Event } from './event.entity';
+import { Role } from './role.entity';
 
 @Entity()
 export class User {
@@ -28,9 +35,9 @@ export class User {
   })
   updated_at: Date;
 
-  @Column()
-  role: string;
-
   @OneToMany(() => Event, (event) => event.user)
   events: Event[];
+
+  @ManyToOne(() => Role)
+  role: Role;
 }

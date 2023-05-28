@@ -1,5 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { User } from './user.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
+import { Permission } from './permission.entity';
 
 @Entity()
 export class Role {
@@ -9,16 +15,7 @@ export class Role {
   @Column()
   name: string;
 
-  @OneToMany(() => User, (user) => user.role)
-  users: User[];
-
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created_at: Date;
-
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
-  updated_at: Date;
+  @ManyToMany(() => Permission)
+  @JoinTable()
+  permissions: Permission[];
 }
