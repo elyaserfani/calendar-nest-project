@@ -92,7 +92,7 @@ describe('UserService', () => {
       jest
         .spyOn(userRepository, 'findByUsername')
         .mockResolvedValueOnce(undefined);
-      jest.spyOn(roleRepository, 'findByName').mockResolvedValueOnce({
+      jest.spyOn(roleRepository, 'findById').mockResolvedValueOnce({
         id: 7,
         name: 'ROLE_USER',
         permissions: null,
@@ -109,6 +109,19 @@ describe('UserService', () => {
         events: null,
       });
       jest.spyOn(jwtHelper, 'generateToken').mockResolvedValueOnce('testtoken');
+      jest
+        .spyOn(userRepository, 'findUserWithRolesAndPermissions')
+        .mockResolvedValueOnce({
+          id: 1,
+          username: 'testuser',
+          email: 'testuser@test.com',
+          password: 'hashedpassword',
+          nickname: 'Test User',
+          role: { id: 7, name: 'ROLE_USER', permissions: null },
+          created_at: new Date(),
+          updated_at: new Date(),
+          events: null,
+        });
       const expected: RegisterResponseDto = {
         data: {
           user: {
@@ -164,7 +177,7 @@ describe('UserService', () => {
       jest
         .spyOn(userRepository, 'findByUsername')
         .mockResolvedValueOnce(undefined);
-      jest.spyOn(roleRepository, 'findByName').mockResolvedValueOnce(undefined);
+      jest.spyOn(roleRepository, 'findById').mockResolvedValueOnce(undefined);
 
       await expect(
         userService.registerUser(registerRequestDto),
@@ -187,6 +200,9 @@ describe('UserService', () => {
       const loginRequestDto = new LoginRequestDto();
       loginRequestDto.username = 'testuser';
       loginRequestDto.password = 'password';
+      jest
+        .spyOn(userRepository, 'findUserWithRolesAndPermissions')
+        .mockResolvedValueOnce(user);
       const result = await userService.loginUser(loginRequestDto);
 
       expect(result).toEqual({
@@ -196,7 +212,7 @@ describe('UserService', () => {
             username: user.username,
             email: user.email,
             nickname: user.nickname,
-            role: user.role,
+            role: user.role.id,
             accessToken: expect.any(String),
           },
         },
