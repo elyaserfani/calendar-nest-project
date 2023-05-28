@@ -1,4 +1,10 @@
-import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Sanitize, Trim } from 'src/decorators';
 
@@ -53,14 +59,14 @@ export class RegisterRequestDto {
   nickname: string;
 
   @ApiProperty({
-    example: 'ROLE_USER',
-    description: 'Enter your role',
-    maxLength: 256,
+    example: 1,
+    description: 'Enter your role id',
+    maxLength: 100,
   })
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  @MaxLength(256)
+  @MaxLength(100)
   @Sanitize()
   @Trim()
-  role: string;
+  role: number;
 }

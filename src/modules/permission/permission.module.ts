@@ -10,6 +10,6 @@ import { PermissionRepository } from '../database';
     PermissionRepository,
     { provide: 'PERMISSION_REPOSITORY', useClass: PermissionRepository },
   ],
-  exports: [PermissionService, PermissionRepository],
+  exports: [PermissionService, PermissionRepository, 'PERMISSION_REPOSITORY'],
 })
 export class PermissionModule {}

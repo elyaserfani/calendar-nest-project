@@ -15,6 +15,12 @@ import { UtilityModule } from '../utility';
     { provide: 'USER_REPOSITORY', useClass: UserRepository },
     { provide: 'ROLE_REPOSITORY', useClass: RoleRepository },
   ],
-  exports: [UserService, UserRepository, RoleRepository],
+  exports: [
+    UserService,
+    UserRepository,
+    RoleRepository,
+    'USER_REPOSITORY',
+    'ROLE_REPOSITORY',
+  ],
 })
 export class UserModule {}

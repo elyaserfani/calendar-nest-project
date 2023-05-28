@@ -31,7 +31,7 @@ export class UserService {
     if (user) {
       throw new BadRequestException('User with this username already exists');
     }
-    const role = await this.roleRepository.findByName(registerRequestDto.role);
+    const role = await this.roleRepository.findById(registerRequestDto.role);
     if (!role) {
       throw new NotFoundException('Role not found');
     }
@@ -41,7 +41,7 @@ export class UserService {
       email: registerRequestDto.email,
       password: hashedPassword,
       nickname: registerRequestDto.nickname,
-      role: registerRequestDto.role,
+      role: role,
     });
     const token = await this.jwtHelper.generateToken(
       savedUser,
@@ -54,7 +54,7 @@ export class UserService {
           username: savedUser.username,
           email: savedUser.email,
           nickname: savedUser.nickname,
-          role: savedUser.role,
+          role: savedUser.role.id,
           accessToken: token,
         },
       },
@@ -86,7 +86,7 @@ export class UserService {
           username: user.username,
           email: user.email,
           nickname: user.nickname,
-          role: user.role,
+          role: user.role.id,
           accessToken: token,
         },
       },

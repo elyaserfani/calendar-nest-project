@@ -9,6 +9,7 @@ import { JwtStrategy } from 'src/utils';
 import * as Joi from 'joi';
 import {
   EventController,
+  PermissionController,
   RoleController,
   UserController,
 } from 'src/controllers';
@@ -45,6 +46,11 @@ import { PermissionModule } from './permission';
   ],
   exports: [JwtModule],
   providers: [JwtStrategy],
-  controllers: [UserController, RoleController, EventController],
+  controllers: [
+    UserController,
+    RoleController,
+    EventController,
+    PermissionController,
+  ],
 })
 export class AppModule {}

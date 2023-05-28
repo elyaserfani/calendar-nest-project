@@ -11,7 +11,7 @@ class RegisteredUser {
   @ApiProperty()
   nickname: string;
   @ApiProperty()
-  role: string;
+  role: number;
   @ApiProperty()
   accessToken: string;
 }
