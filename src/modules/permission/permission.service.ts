@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { IPermissionRepository } from 'src/interfaces/repositories';
 import {
   CreatePermissionRequestDto,
@@ -6,6 +6,7 @@ import {
   PermissionsResponseDto,
 } from 'src/dtos/permissions';
 import { SuccessResponseDto } from 'src/commons';
+import { NotFoundException } from 'src/exceptions';
 
 @Injectable()
 export class PermissionService {

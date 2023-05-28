@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  NotFoundException,
   Param,
   Post,
   Query,
@@ -17,6 +16,7 @@ import {
 } from 'src/dtos/permissions';
 import { SuccessResponseDto } from 'src/commons';
 import { SwaggerCustomException } from 'src/decorators';
+import { NotFoundException } from 'src/exceptions';
 
 @Controller('permissions')
 @ApiTags('Permission')
