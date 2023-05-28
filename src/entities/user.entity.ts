@@ -4,6 +4,7 @@ import {
   Column,
   OneToMany,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Event } from './event.entity';
 import { Role } from './role.entity';
@@ -39,5 +40,6 @@ export class User {
   events: Event[];
 
   @ManyToOne(() => Role)
+  @JoinColumn()
   role: Role;
 }

@@ -44,7 +44,7 @@ export class UserService {
       role: role,
     });
     const token = await this.jwtHelper.generateToken(
-      savedUser,
+      await this.userRepository.findUserWithRolesAndPermissions(savedUser.id),
       this.customConfigService.getJwtSecret(),
     );
     return {
@@ -76,7 +76,7 @@ export class UserService {
       throw new BadRequestException('Invalid credentials');
     }
     const token = await this.jwtHelper.generateToken(
-      user,
+      await this.userRepository.findUserWithRolesAndPermissions(user.id),
       this.customConfigService.getJwtSecret(),
     );
     return {

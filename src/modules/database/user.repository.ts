@@ -10,7 +10,6 @@ export class UserRepository implements IUserRepository {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
-
   findByUsername(username: string): Promise<User> {
     return this.userRepository
       .createQueryBuilder('user')
@@ -22,5 +21,14 @@ export class UserRepository implements IUserRepository {
   async createUser(userData: Partial<User>): Promise<User> {
     const user = this.userRepository.create(userData);
     return this.userRepository.save(user);
+  }
+
+  findUserWithRolesAndPermissions(userId: number) {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.role', 'role')
+      .leftJoinAndSelect('role.permissions', 'permission')
+      .where('user.id = :userId', { userId })
+      .getOne();
   }
 }

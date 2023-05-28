@@ -29,16 +29,16 @@ export class CreateRoleRequestDto {
     description: 'An array of permission associated with the role',
     example: [
       {
-        id: 6,
-        name: 'UPDATE',
-      },
-      {
-        id: 7,
+        id: 12,
         name: 'READ',
       },
       {
-        id: 8,
+        id: 13,
         name: 'WRITE',
+      },
+      {
+        id: 14,
+        name: 'UPDATE',
       },
     ],
   })

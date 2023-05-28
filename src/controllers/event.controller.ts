@@ -17,7 +17,12 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Auth, SwaggerCustomException } from 'src/decorators';
+import {
+  Auth,
+  CheckPermissions,
+  CheckRoles,
+  SwaggerCustomException,
+} from 'src/decorators';
 import { SuccessResponseDto } from 'src/commons';
 import {
   CreateEventResponseDto,
@@ -27,7 +32,7 @@ import {
   UpdateEventResponseDto,
   UpdateEventRequestDto,
 } from 'src/dtos/events';
-import { JwtAuthGuard } from 'src/guards';
+import { JwtAuthGuard, RolesAndPermissionsGuard } from 'src/guards';
 import { AuthPayload } from 'src/utils';
 import { EventService } from 'src/modules/event';
 
@@ -101,6 +106,9 @@ export class EventController {
   }
 
   @Delete('/:id')
+  @UseGuards(RolesAndPermissionsGuard)
+  @CheckRoles('ROLE_USER')
+  @CheckPermissions('DELETE')
   @ApiOperation({ summary: 'Delete single event' })
   @ApiResponse({
     status: 200,
