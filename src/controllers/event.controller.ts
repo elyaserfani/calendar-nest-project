@@ -33,12 +33,12 @@ import { EventService } from 'src/modules/event';
 
 @Controller('events')
 @UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 @ApiTags('Event')
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Post()
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new event' })
   @ApiResponse({
     status: 201,
@@ -53,7 +53,6 @@ export class EventController {
   }
 
   @Get()
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all user events with pagination' })
   @ApiQuery({ name: 'page', type: 'number', required: true, example: 1 })
   @ApiQuery({ name: 'pageSize', type: 'number', required: true, example: 10 })
@@ -71,7 +70,6 @@ export class EventController {
   }
 
   @Get('/:id')
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get single event' })
   @ApiResponse({
     status: 200,
@@ -87,7 +85,6 @@ export class EventController {
   }
 
   @Put('/:id')
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update single event' })
   @ApiResponse({
     status: 200,
@@ -104,7 +101,6 @@ export class EventController {
   }
 
   @Delete('/:id')
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete single event' })
   @ApiResponse({
     status: 200,
