@@ -15,6 +15,7 @@ import {
 import { UtilityModule } from './utility';
 import { NotificationModule } from './notification/notification.module';
 import { SchedulerModule } from './scheduler';
+import { PermissionModule } from './permission';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { SchedulerModule } from './scheduler';
       }),
     }),
     UserModule,
+    PermissionModule,
     RoleModule,
     EventModule,
     JwtModule.register({
