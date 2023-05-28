@@ -1,6 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Permission, User } from 'src/entities';
 import { GlobalExceptionEnum, UnauthorizedException } from 'src/exceptions';
 
 @Injectable()
