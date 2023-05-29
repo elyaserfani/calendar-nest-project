@@ -11,11 +11,10 @@ export class UserRepository implements IUserRepository {
     private readonly userRepository: Repository<User>,
   ) {}
   findByUsername(username: string): Promise<User> {
-    return this.userRepository
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.role', 'role')
-      .where('user.username = :username', { username })
-      .getOne();
+    return this.userRepository.findOne({
+      where: { username },
+      relations: ['role'],
+    });
   }
 
   async createUser(userData: Partial<User>): Promise<User> {
@@ -24,11 +23,9 @@ export class UserRepository implements IUserRepository {
   }
 
   findUserWithRolesAndPermissions(userId: number) {
-    return this.userRepository
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.role', 'role')
-      .leftJoinAndSelect('role.permissions', 'permission')
-      .where('user.id = :userId', { userId })
-      .getOne();
+    return this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['role', 'role.permissions'],
+    });
   }
 }
