@@ -45,26 +45,10 @@ describe('UserService', () => {
         {
           provide: 'USER_REPOSITORY',
           useClass: UserRepository,
-          useValue: {
-            findOneBy: jest.fn(),
-            create: jest.fn(),
-            find: jest.fn(),
-            delete: jest.fn(),
-            findAndCount: jest.fn(),
-            update: jest.fn(),
-          },
         },
         {
           provide: 'ROLE_REPOSITORY',
           useClass: RoleRepository,
-          useValue: {
-            findOneBy: jest.fn(),
-            create: jest.fn(),
-            find: jest.fn(),
-            delete: jest.fn(),
-            findAndCount: jest.fn(),
-            update: jest.fn(),
-          },
         },
       ],
     }).compile();

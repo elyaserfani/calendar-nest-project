@@ -29,14 +29,6 @@ describe('PermissionService', () => {
         {
           provide: 'PERMISSION_REPOSITORY',
           useClass: PermissionRepository,
-          useValue: {
-            findOneBy: jest.fn(),
-            create: jest.fn(),
-            find: jest.fn(),
-            delete: jest.fn(),
-            findAndCount: jest.fn(),
-            update: jest.fn(),
-          },
         },
       ],
     }).compile();
