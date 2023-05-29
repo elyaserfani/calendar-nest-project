@@ -10,6 +10,6 @@ import { RoleRepository } from '../database';
     RoleRepository,
     { provide: 'ROLE_REPOSITORY', useClass: RoleRepository },
   ],
-  exports: [RoleService, 'ROLE_REPOSITORY'],
+  exports: [RoleService, RoleRepository, 'ROLE_REPOSITORY'],
 })
 export class RoleModule {}

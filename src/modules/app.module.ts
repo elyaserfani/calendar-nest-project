@@ -9,12 +9,14 @@ import { JwtStrategy } from 'src/utils';
 import * as Joi from 'joi';
 import {
   EventController,
+  PermissionController,
   RoleController,
   UserController,
 } from 'src/controllers';
 import { UtilityModule } from './utility';
 import { NotificationModule } from './notification/notification.module';
 import { SchedulerModule } from './scheduler';
+import { PermissionModule } from './permission';
 
 @Module({
   imports: [
@@ -31,6 +33,7 @@ import { SchedulerModule } from './scheduler';
       }),
     }),
     UserModule,
+    PermissionModule,
     RoleModule,
     EventModule,
     JwtModule.register({
@@ -43,6 +46,11 @@ import { SchedulerModule } from './scheduler';
   ],
   exports: [JwtModule],
   providers: [JwtStrategy],
-  controllers: [UserController, RoleController, EventController],
+  controllers: [
+    UserController,
+    RoleController,
+    EventController,
+    PermissionController,
+  ],
 })
 export class AppModule {}

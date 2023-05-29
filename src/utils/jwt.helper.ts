@@ -19,6 +19,8 @@ export class JwtHelper {
       email: user.email,
       username: user.username,
       iat: iat,
+      role: user.role.name,
+      permissions: user.role.permissions,
     };
     return await this.jwtService.signAsync(payload, {
       secret,

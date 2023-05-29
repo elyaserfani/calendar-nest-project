@@ -45,26 +45,10 @@ describe('UserService', () => {
         {
           provide: 'USER_REPOSITORY',
           useClass: UserRepository,
-          useValue: {
-            findOneBy: jest.fn(),
-            create: jest.fn(),
-            find: jest.fn(),
-            delete: jest.fn(),
-            findAndCount: jest.fn(),
-            update: jest.fn(),
-          },
         },
         {
           provide: 'ROLE_REPOSITORY',
           useClass: RoleRepository,
-          useValue: {
-            findOneBy: jest.fn(),
-            create: jest.fn(),
-            find: jest.fn(),
-            delete: jest.fn(),
-            findAndCount: jest.fn(),
-            update: jest.fn(),
-          },
         },
       ],
     }).compile();
@@ -86,18 +70,16 @@ describe('UserService', () => {
         email: 'testuser@test.com',
         password: 'password123',
         nickname: 'Test User',
-        role: 'ROLE_USER',
+        role: 7,
       };
 
       jest
         .spyOn(userRepository, 'findByUsername')
         .mockResolvedValueOnce(undefined);
-      jest.spyOn(roleRepository, 'findByName').mockResolvedValueOnce({
-        id: 1,
+      jest.spyOn(roleRepository, 'findById').mockResolvedValueOnce({
+        id: 7,
         name: 'ROLE_USER',
-        created_at: new Date(),
-        updated_at: new Date(),
-        users: null,
+        permissions: null,
       });
       jest.spyOn(userRepository, 'createUser').mockResolvedValueOnce({
         id: 1,
@@ -105,12 +87,25 @@ describe('UserService', () => {
         email: 'testuser@test.com',
         password: 'hashedpassword',
         nickname: 'Test User',
-        role: 'ROLE_USER',
+        role: { id: 7, name: 'ROLE_USER', permissions: null },
         created_at: new Date(),
         updated_at: new Date(),
         events: null,
       });
       jest.spyOn(jwtHelper, 'generateToken').mockResolvedValueOnce('testtoken');
+      jest
+        .spyOn(userRepository, 'findUserWithRolesAndPermissions')
+        .mockResolvedValueOnce({
+          id: 1,
+          username: 'testuser',
+          email: 'testuser@test.com',
+          password: 'hashedpassword',
+          nickname: 'Test User',
+          role: { id: 7, name: 'ROLE_USER', permissions: null },
+          created_at: new Date(),
+          updated_at: new Date(),
+          events: null,
+        });
       const expected: RegisterResponseDto = {
         data: {
           user: {
@@ -118,7 +113,7 @@ describe('UserService', () => {
             username: 'testuser',
             email: 'testuser@test.com',
             nickname: 'Test User',
-            role: 'ROLE_USER',
+            role: 7,
             accessToken: expect.any(String),
           },
         },
@@ -134,7 +129,7 @@ describe('UserService', () => {
         email: 'testuser@test.com',
         password: 'password123',
         nickname: 'Test User',
-        role: 'ROLE_USER',
+        role: 7,
       };
 
       jest.spyOn(userRepository, 'findByUsername').mockResolvedValueOnce({
@@ -143,7 +138,7 @@ describe('UserService', () => {
         email: 'testuser@test.com',
         password: 'hashedpassword',
         nickname: 'Test User',
-        role: 'ROLE_USER',
+        role: { id: 7, name: 'ROLE_USER', permissions: null },
         created_at: new Date(),
         updated_at: new Date(),
         events: null,
@@ -160,13 +155,13 @@ describe('UserService', () => {
         email: 'testuser@test.com',
         password: 'password123',
         nickname: 'Test User',
-        role: 'INVALID_ROLE',
+        role: 7,
       };
 
       jest
         .spyOn(userRepository, 'findByUsername')
         .mockResolvedValueOnce(undefined);
-      jest.spyOn(roleRepository, 'findByName').mockResolvedValueOnce(undefined);
+      jest.spyOn(roleRepository, 'findById').mockResolvedValueOnce(undefined);
 
       await expect(
         userService.registerUser(registerRequestDto),
@@ -182,13 +177,16 @@ describe('UserService', () => {
       user.email = 'testuser@example.com';
       user.nickname = 'Test User';
       user.password = await bcrypt.hash('password', 10);
-      user.role = 'ROLE_USER';
+      user.role = { id: 7, name: 'ROLE_USER', permissions: null };
 
       jest.spyOn(userRepository, 'findByUsername').mockResolvedValue(user);
 
       const loginRequestDto = new LoginRequestDto();
       loginRequestDto.username = 'testuser';
       loginRequestDto.password = 'password';
+      jest
+        .spyOn(userRepository, 'findUserWithRolesAndPermissions')
+        .mockResolvedValueOnce(user);
       const result = await userService.loginUser(loginRequestDto);
 
       expect(result).toEqual({
@@ -198,7 +196,7 @@ describe('UserService', () => {
             username: user.username,
             email: user.email,
             nickname: user.nickname,
-            role: user.role,
+            role: user.role.id,
             accessToken: expect.any(String),
           },
         },
@@ -221,7 +219,7 @@ describe('UserService', () => {
       user.email = 'testuser@example.com';
       user.nickname = 'Test User';
       user.password = await bcrypt.hash('password', 10);
-      user.role = 'ROLE_USER';
+      user.role = { id: 7, name: 'ROLE_USER', permissions: null };
       jest.spyOn(userRepository, 'findByUsername').mockResolvedValue(user);
       const loginRequestDto = new LoginRequestDto();
       loginRequestDto.username = 'testuser';
