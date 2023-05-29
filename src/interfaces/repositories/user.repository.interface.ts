@@ -1,7 +1,7 @@
-import { User } from 'src/entities';
+import { IUser } from 'src/modules/user';
 
 export interface IUserRepository {
-  findByUsername(username: string): Promise<User | undefined>;
-  createUser(userData: Partial<User>): Promise<User>;
-  findUserWithRolesAndPermissions(userId: number): Promise<User | undefined>;
+  findByUsername(username: string): Promise<IUser | undefined>;
+  createUser(userData: Partial<IUser>): Promise<IUser>;
+  findUserWithRolesAndPermissions(userId: number): Promise<IUser | undefined>;
 }
