@@ -33,14 +33,6 @@ describe('EventsService', () => {
         {
           provide: 'EVENT_REPOSITORY',
           useClass: EventRepository,
-          useValue: {
-            findOneBy: jest.fn(),
-            create: jest.fn(),
-            find: jest.fn(),
-            delete: jest.fn(),
-            findAndCount: jest.fn(),
-            update: jest.fn(),
-          },
         },
         {
           provide: 'NOTIFICATION_TYPE',
