@@ -1,14 +1,14 @@
-import { Permission } from 'src/entities';
-import { DeleteResult, UpdateResult } from 'typeorm';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { QueryDeepPartialEntity } from '../common/query.deep.partial.entity.type';
+import { IDeleteResult, IUpdateResult } from '../common';
+import { IPermission } from 'src/modules/permission';
 
 export interface IPermissionRepository {
-  createPermission(permissionData: Partial<Permission>): Promise<Permission>;
-  findById(id: number): Promise<Permission | undefined>;
-  deletePermission(id: number): Promise<DeleteResult>;
-  pagination(page: number, pageSize: number): Promise<[Permission[], number]>;
+  createPermission(permissionData: Partial<IPermission>): Promise<IPermission>;
+  findById(id: number): Promise<IPermission | undefined>;
+  deletePermission(id: number): Promise<IDeleteResult>;
+  pagination(page: number, pageSize: number): Promise<[IPermission[], number]>;
   updatePermission(
     permissionId: number,
-    entity: QueryDeepPartialEntity<Permission>,
-  ): Promise<UpdateResult>;
+    entity: QueryDeepPartialEntity<IPermission>,
+  ): Promise<IUpdateResult>;
 }

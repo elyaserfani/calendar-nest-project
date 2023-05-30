@@ -1,6 +1,6 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { IJobScheduler, IScheduler } from 'src/interfaces';
 import { EventService } from '../event';
+import { IJobScheduler, IScheduler } from 'src/interfaces/scheduler';
 
 @Injectable()
 export class SchedulerService implements IJobScheduler, OnModuleInit {

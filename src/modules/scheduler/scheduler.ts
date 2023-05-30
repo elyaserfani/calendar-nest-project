@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CronJob } from 'cron';
-import { IScheduler } from 'src/interfaces';
+import { IScheduler } from 'src/interfaces/scheduler';
 
 @Injectable()
 export class Scheduler implements IScheduler {

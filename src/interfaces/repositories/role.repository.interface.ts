@@ -1,10 +1,10 @@
-import { Role } from 'src/entities';
-import { DeleteResult } from 'typeorm';
+import { IRole } from 'src/modules/role';
+import { IDeleteResult } from '../common';
 
 export interface IRoleRepository {
-  findByName(name: string): Promise<Role | undefined>;
-  findById(id: number): Promise<Role | undefined>;
-  createRole(roleData: Partial<Role>): Promise<Role>;
-  deleteRole(id: number): Promise<DeleteResult>;
-  pagination(page: number, pageSize: number): Promise<[Role[], number]>;
+  findByName(name: string): Promise<IRole | undefined>;
+  findById(id: number): Promise<IRole | undefined>;
+  createRole(roleData: Partial<IRole>): Promise<IRole>;
+  deleteRole(id: number): Promise<IDeleteResult>;
+  pagination(page: number, pageSize: number): Promise<[IRole[], number]>;
 }

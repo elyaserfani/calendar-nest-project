@@ -1,23 +1,26 @@
-import { Event } from 'src/entities';
-import { DeleteResult, UpdateResult } from 'typeorm';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { IEvent } from 'src/modules/event';
+import {
+  IDeleteResult,
+  QueryDeepPartialEntity,
+  IUpdateResult,
+} from '../common';
 
 export interface IEventRepository {
-  createEvent(eventData: Partial<Event>, userId: number): Promise<Event>;
-  findById(id: number): Promise<Event | undefined>;
+  createEvent(eventData: Partial<IEvent>, userId: number): Promise<IEvent>;
+  findById(id: number): Promise<IEvent | undefined>;
   checkEventOwnership(
     eventId: number,
     userId: number,
-  ): Promise<Event | undefined>;
-  deleteEvent(id: number): Promise<DeleteResult>;
+  ): Promise<IEvent | undefined>;
+  deleteEvent(id: number): Promise<IDeleteResult>;
   pagination(
     userId: number,
     page: number,
     pageSize: number,
-  ): Promise<[Event[], number]>;
+  ): Promise<[IEvent[], number]>;
   updateEvent(
     eventId: number,
-    entity: QueryDeepPartialEntity<Event>,
-  ): Promise<UpdateResult>;
-  findNotNotifiedEvents(due_date: Date, notified: boolean): Promise<Event[]>;
+    entity: QueryDeepPartialEntity<IEvent>,
+  ): Promise<IUpdateResult>;
+  findNotNotifiedEvents(due_date: Date, notified: boolean): Promise<IEvent[]>;
 }
